@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cheka-api"
+version = "0.1.0"
+description = "FastAPI backend for Cheka contract intake and analysis."
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi",
+  "pydantic>=2",
+  "pydantic-settings",
+  "uvicorn[standard]",
+  "supabase",
+  "python-dotenv",
+  "pypdf",
+  "python-docx",
+  "pytesseract",
+  "Pillow",
+  "pdf2image",
+  "httpx",
+  "anthropic",
+  "instructor"
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx",
+  "pytest"
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+

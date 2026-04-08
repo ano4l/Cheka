@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f5efe4;
+  --foreground: #14231d;
+  --surface: rgba(255, 250, 242, 0.82);
+  --line: rgba(20, 35, 29, 0.1);
+  --font-sans: "Aptos", "Trebuchet MS", "Segoe UI", sans-serif;
+  --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(209, 119, 85, 0.22), transparent 34%),
+    radial-gradient(circle at top right, rgba(41, 71, 59, 0.18), transparent 28%),
+    linear-gradient(180deg, #fbf7f0 0%, #f2eadc 100%);
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+}
+
+body::selection {
+  background: rgba(209, 119, 85, 0.25);
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display), serif;
+    letter-spacing: -0.03em;
+  }
+}
+
+@layer components {
+  .cheka-shell {
+    @apply mx-auto max-w-7xl px-6 py-8 sm:px-8 lg:px-12;
+  }
+
+  .cheka-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(14px);
+    @apply rounded-4xl shadow-glow;
+  }
+
+  .cheka-input {
+    border: 1px solid rgba(20, 35, 29, 0.12);
+    background: rgba(255, 255, 255, 0.8);
+    color: #14231d;
+    @apply w-full rounded-[1.2rem] px-4 py-3 outline-none transition;
+  }
+
+  .cheka-input:focus {
+    border-color: rgba(41, 71, 59, 0.5);
+    box-shadow: 0 0 0 4px rgba(41, 71, 59, 0.08);
+  }
+}

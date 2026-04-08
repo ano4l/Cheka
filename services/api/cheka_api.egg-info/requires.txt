@@ -1,0 +1,16 @@
+fastapi
+pydantic>=2
+pydantic-settings
+uvicorn[standard]
+supabase
+python-dotenv
+pypdf
+python-docx
+pytesseract
+Pillow
+pdf2image
+httpx
+
+[dev]
+httpx
+pytest

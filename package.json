@@ -1,0 +1,17 @@
+{
+  "name": "cheka",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace @cheka/web",
+    "build:web": "npm run build --workspace @cheka/web",
+    "lint:web": "npm run lint --workspace @cheka/web",
+    "dev:mobile": "npm run start --workspace @cheka/mobile",
+    "build:mobile": "npm run build --workspace @cheka/mobile",
+    "dev:api": "uvicorn app.main:app --reload --app-dir services/api",
+    "test:api": "python -m pytest -c services/api/pyproject.toml services/api/tests"
+  }
+}
