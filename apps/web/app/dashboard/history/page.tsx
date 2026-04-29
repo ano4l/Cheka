@@ -1,0 +1,55 @@
+import { getSession } from "../../lib/session";
+import { DashboardTopbar } from "../components/DashboardTopbar";
+import { demoActivity } from "../components/seed-data";
+
+export default async function HistoryPage() {
+  const session = await getSession();
+
+  return (
+    <>
+      <DashboardTopbar
+        breadcrumbs={[
+          { label: session?.workspace ?? "Workspace", href: "/dashboard" },
+          { label: "Activity" },
+        ]}
+        subtitle="A timeline of every review, follow-up, and credit event in this workspace"
+        title="Activity"
+      />
+
+      <div className="flex-1 px-6 py-6">
+        <div className="surface overflow-hidden">
+          <ul className="divide-y divide-line">
+            {demoActivity.map((event) => (
+              <li className="flex items-start gap-3 px-4 py-3" key={event.id}>
+                <span
+                  className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md border ${
+                    event.kind === "high_risk"
+                      ? "border-rose-200 bg-rose-50 text-rose-700"
+                      : event.kind === "review_completed"
+                        ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                        : event.kind === "credit_added"
+                          ? "border-accent/30 bg-accent-soft text-accent-strong"
+                          : "border-line bg-canvas text-muted"
+                  }`}
+                >
+                  <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">
+                    {event.kind === "high_risk" ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4m0 4h.01M5 19h14a2 2 0 001.7-3L13.7 4a2 2 0 00-3.4 0L3.3 16A2 2 0 005 19z" />
+                    ) : (
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    )}
+                  </svg>
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-ink">{event.title}</p>
+                  <p className="text-xs text-muted">{event.meta}</p>
+                </div>
+                <span className="shrink-0 text-[11px] text-muted">{event.when}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </>
+  );
+}

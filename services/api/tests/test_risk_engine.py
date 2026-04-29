@@ -44,8 +44,7 @@ def test_build_preview_analysis_returns_human_readable_output() -> None:
 
     response = build_preview_analysis(text)
 
-    assert response.risk_level == RiskClassification.medium
+    assert response.risk_level == RiskClassification.high
     assert response.key_points
     assert response.red_flags
     assert "preview found signals" in response.summary.lower()
-

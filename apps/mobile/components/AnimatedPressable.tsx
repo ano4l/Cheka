@@ -13,6 +13,8 @@ interface Props extends PressableProps {
   children: React.ReactNode;
 }
 
+const AnimatedRootPressable = Animated.createAnimatedComponent(Pressable);
+
 export function AnimatedPressable({
   style,
   scaleValue = 0.98,
@@ -56,23 +58,20 @@ export function AnimatedPressable({
   };
 
   return (
-    <Pressable
+    <AnimatedRootPressable
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       disabled={disabled}
+      style={[
+        style,
+        {
+          transform: [{ scale }],
+          opacity: disabled ? 0.35 : opacity,
+        },
+      ]}
       {...rest}
     >
-      <Animated.View
-        style={[
-          style,
-          {
-            transform: [{ scale }],
-            opacity: disabled ? 0.35 : opacity,
-          },
-        ]}
-      >
-        {children}
-      </Animated.View>
-    </Pressable>
+      {children}
+    </AnimatedRootPressable>
   );
 }

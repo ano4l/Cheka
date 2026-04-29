@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "cheka-web",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "dev", "--port", "3210"],
+      "port": 3210,
+      "cwd": "apps/web"
+    }
+  ]
+}

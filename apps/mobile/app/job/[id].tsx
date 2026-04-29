@@ -1,10 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useCallback, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
+  Linking,
   Platform,
   ScrollView,
   StyleSheet,
@@ -13,12 +14,19 @@ import {
   View,
 } from "react-native";
 
+import { AnalysisCard } from "../../components/AnalysisCard";
 import { AnimatedPressable } from "../../components/AnimatedPressable";
-import { askFollowUp, confirmPayment } from "../../lib/api";
+import { ConversationThread } from "../../components/ConversationThread";
+import {
+  askFollowUp,
+  confirmPayment,
+  fetchJob,
+  initializeCheckout,
+  retryJob,
+  usingExternalApi,
+} from "../../lib/api";
 import { useJobsStore } from "../../lib/store";
 import { colors, fonts, fontWeights, radii, spacing } from "../../lib/theme";
-import { AnalysisCard } from "../../components/AnalysisCard";
-import { ConversationThread } from "../../components/ConversationThread";
 
 const marketLabels: Record<string, string> = {
   south_africa: "South Africa",
@@ -27,26 +35,68 @@ const marketLabels: Record<string, string> = {
 
 export default function JobScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const job = useJobsStore((s) => s.jobs.find((j) => j.job_id === id));
-  const updateJob = useJobsStore((s) => s.updateJob);
-  const getText = useJobsStore((s) => s.getText);
+  const job = useJobsStore((state) => state.jobs.find((entry) => entry.job_id === id));
+  const updateJob = useJobsStore((state) => state.updateJob);
+  const getText = useJobsStore((state) => state.getText);
+  const apiConnected = usingExternalApi();
 
   const [isPending, setIsPending] = useState(false);
+  const [isRefreshingJob, setIsRefreshingJob] = useState(() => Boolean(apiConnected && id));
   const [followUpQuestion, setFollowUpQuestion] = useState("");
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!apiConnected || !id) {
+        return undefined;
+      }
+
+      let isActive = true;
+
+      const refreshJob = async () => {
+        setIsRefreshingJob(true);
+        try {
+          const latestJob = await fetchJob(id);
+          if (isActive) {
+            updateJob(latestJob);
+          }
+        } catch {
+          // Keep the refresh silent so passive sync never interrupts the review flow.
+        } finally {
+          if (isActive) {
+            setIsRefreshingJob(false);
+          }
+        }
+      };
+
+      void refreshJob();
+
+      return () => {
+        isActive = false;
+      };
+    }, [apiConnected, id, updateJob]),
+  );
 
   if (!job) {
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>Job not found.</Text>
+        {isRefreshingJob ? (
+          <>
+            <ActivityIndicator size="small" color={colors.primary} />
+            <Text style={styles.emptyText}>Loading latest review...</Text>
+          </>
+        ) : (
+          <Text style={styles.emptyText}>Job not found.</Text>
+        )}
       </View>
     );
   }
 
+  const currentJob = job;
+
   async function handleConfirmPayment() {
-    if (!job) return;
     setIsPending(true);
     try {
-      const updated = await confirmPayment(job, getText(job.job_id));
+      const updated = await confirmPayment(currentJob, getText(currentJob.job_id));
       updateJob(updated);
     } catch (err) {
       Alert.alert("Error", err instanceof Error ? err.message : "Payment confirmation failed.");
@@ -55,11 +105,31 @@ export default function JobScreen() {
     }
   }
 
-  async function handleFollowUp() {
-    if (!job || !followUpQuestion.trim()) return;
+  async function handlePrepareCheckout() {
     setIsPending(true);
     try {
-      const result = await askFollowUp(job, followUpQuestion.trim());
+      const updated = await initializeCheckout(currentJob, {
+        customer_email: currentJob.customer_email ?? undefined,
+      });
+      updateJob(updated);
+      if (updated.payment.checkout_url) {
+        await Linking.openURL(updated.payment.checkout_url);
+      }
+    } catch (err) {
+      Alert.alert("Error", err instanceof Error ? err.message : "Checkout initialization failed.");
+    } finally {
+      setIsPending(false);
+    }
+  }
+
+  async function handleFollowUp() {
+    if (!followUpQuestion.trim()) {
+      return;
+    }
+
+    setIsPending(true);
+    try {
+      const result = await askFollowUp(currentJob, followUpQuestion.trim());
       updateJob(result.job);
       setFollowUpQuestion("");
       if (result.response.upgrade_required) {
@@ -72,7 +142,19 @@ export default function JobScreen() {
     }
   }
 
-  const isPaid = job.payment.payment_status === "paid";
+  async function handleRetry() {
+    setIsPending(true);
+    try {
+      const updated = await retryJob(currentJob, getText(currentJob.job_id));
+      updateJob(updated);
+    } catch (err) {
+      Alert.alert("Error", err instanceof Error ? err.message : "Retry failed.");
+    } finally {
+      setIsPending(false);
+    }
+  }
+
+  const isPaid = currentJob.payment.payment_status === "paid";
 
   return (
     <KeyboardAvoidingView
@@ -85,11 +167,18 @@ export default function JobScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* ── Header ── */}
         <View style={styles.headerBlock}>
-          <Text style={styles.contractName}>
-            {job.source_name ?? "Unnamed contract"}
-          </Text>
+          <View style={styles.headerRow}>
+            <Text style={styles.contractName}>
+              {currentJob.source_name ?? "Unnamed contract"}
+            </Text>
+            {isRefreshingJob ? (
+              <View style={styles.syncChip}>
+                <ActivityIndicator size="small" color={colors.primary} />
+                <Text style={styles.syncChipText}>Syncing</Text>
+              </View>
+            ) : null}
+          </View>
           <View style={styles.metaRow}>
             <View style={[styles.statusChip, isPaid ? styles.chipPaid : styles.chipPending]}>
               <View style={[styles.statusDot, { backgroundColor: isPaid ? colors.success : colors.warning }]} />
@@ -98,17 +187,25 @@ export default function JobScreen() {
               </Text>
             </View>
             <Text style={styles.metaText}>
-              {marketLabels[job.market] ?? job.market}
+              {marketLabels[currentJob.market] ?? currentJob.market}
             </Text>
-            <Text style={styles.metaDot}>·</Text>
-            <Text style={styles.metaText}>{job.payment.display_amount}</Text>
+            <Text style={styles.metaDot}>-</Text>
+            <Text style={styles.metaText}>{currentJob.payment.display_amount}</Text>
           </View>
         </View>
 
-        {/* ── Payment CTA ── */}
         {!isPaid && (
           <View style={styles.paymentBlock}>
-            <Text style={styles.paymentNote}>{job.payment.note}</Text>
+            <Text style={styles.paymentNote}>{currentJob.payment.note}</Text>
+            {apiConnected ? (
+              <AnimatedPressable
+                style={[styles.secondaryPaymentBtn, isPending && styles.disabled]}
+                onPress={handlePrepareCheckout}
+                disabled={isPending}
+              >
+                <Text style={styles.secondaryPaymentBtnText}>Prepare checkout</Text>
+              </AnimatedPressable>
+            ) : null}
             <AnimatedPressable
               style={[styles.paymentBtn, isPending && styles.disabled]}
               onPress={handleConfirmPayment}
@@ -117,26 +214,57 @@ export default function JobScreen() {
               {isPending ? (
                 <ActivityIndicator size="small" color={colors.textOnDark} />
               ) : (
-                <Text style={styles.paymentBtnText}>Confirm payment</Text>
+                <Text style={styles.paymentBtnText}>
+                  {apiConnected ? "Confirm payment after checkout" : "Confirm payment"}
+                </Text>
               )}
             </AnimatedPressable>
           </View>
         )}
 
-        {/* ── Analysis ── */}
-        {job.analysis && (
+        {isPaid && currentJob.status === "processing" ? (
+          <View style={styles.processingBlock}>
+            <ActivityIndicator size="small" color={colors.primary} />
+            <Text style={styles.processingText}>
+              Payment is confirmed and your analysis is still processing.
+            </Text>
+          </View>
+        ) : null}
+
+        {currentJob.status === "failed" ? (
+          <View style={styles.failedBlock}>
+            <Text style={styles.failedText}>
+              This review failed during processing, but you can retry it here without creating a new checkout.
+            </Text>
+            <AnimatedPressable
+              style={[styles.failedActionBtn, isPending && styles.disabled]}
+              onPress={handleRetry}
+              disabled={isPending}
+            >
+              {isPending ? (
+                <ActivityIndicator size="small" color={colors.textOnDark} />
+              ) : (
+                <>
+                  <Ionicons name="refresh" size={18} color={colors.textOnDark} />
+                  <Text style={styles.failedActionText}>Retry analysis</Text>
+                </>
+              )}
+            </AnimatedPressable>
+          </View>
+        ) : null}
+
+        {currentJob.analysis ? (
           <>
             <AnalysisCard
-              analysis={job.analysis}
-              escalationRecommended={job.escalation_recommended}
+              analysis={currentJob.analysis}
+              escalationRecommended={currentJob.escalation_recommended}
             />
 
-            {/* ── Follow-up ── */}
             <View style={styles.followUpBlock}>
               <View style={styles.followUpHeader}>
                 <Text style={styles.followUpTitle}>Follow-up</Text>
                 <Text style={styles.counterText}>
-                  {job.follow_up.questions_remaining} left
+                  {currentJob.follow_up.questions_remaining} left
                 </Text>
               </View>
 
@@ -164,10 +292,10 @@ export default function JobScreen() {
                 </AnimatedPressable>
               </View>
 
-              <ConversationThread messages={job.conversation} />
+              <ConversationThread messages={currentJob.conversation} />
             </View>
           </>
-        )}
+        ) : null}
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -192,15 +320,35 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontSize: fonts.bodyLarge,
   },
-
   headerBlock: {
     gap: spacing.sm,
   },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: spacing.sm,
+  },
   contractName: {
+    flex: 1,
     fontSize: fonts.title2,
     fontWeight: fontWeights.bold,
     color: colors.textPrimary,
     letterSpacing: -0.3,
+  },
+  syncChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    borderRadius: radii.full,
+    backgroundColor: colors.bgSoft,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  syncChipText: {
+    color: colors.textSecondary,
+    fontSize: fonts.caption,
+    fontWeight: fontWeights.semibold,
   },
   metaRow: {
     flexDirection: "row",
@@ -234,7 +382,6 @@ const styles = StyleSheet.create({
     fontSize: fonts.label,
     color: colors.textMuted,
   },
-
   paymentBlock: {
     backgroundColor: colors.bgSoft,
     borderRadius: radii.md,
@@ -247,19 +394,71 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   paymentBtn: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.dark,
     borderRadius: radii.md,
     paddingVertical: 16,
     alignItems: "center",
     justifyContent: "center",
+  },
+  secondaryPaymentBtn: {
+    backgroundColor: colors.bg,
+    borderRadius: radii.md,
+    paddingVertical: 14,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   paymentBtnText: {
     color: colors.textOnDark,
     fontSize: fonts.bodyLarge,
     fontWeight: fontWeights.semibold,
   },
+  secondaryPaymentBtnText: {
+    color: colors.textPrimary,
+    fontSize: fonts.body,
+    fontWeight: fontWeights.semibold,
+  },
   disabled: { opacity: 0.35 },
-
+  processingBlock: {
+    backgroundColor: colors.bgSoft,
+    borderRadius: radii.md,
+    padding: spacing.md,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+  },
+  processingText: {
+    flex: 1,
+    color: colors.textSecondary,
+    fontSize: fonts.body,
+  },
+  failedBlock: {
+    backgroundColor: colors.riskHighBg,
+    borderRadius: radii.md,
+    padding: spacing.md,
+    gap: spacing.md,
+  },
+  failedText: {
+    color: colors.riskHigh,
+    fontSize: fonts.body,
+    lineHeight: 22,
+  },
+  failedActionBtn: {
+    minHeight: 48,
+    borderRadius: radii.md,
+    backgroundColor: colors.dark,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingHorizontal: spacing.md,
+  },
+  failedActionText: {
+    color: colors.textOnDark,
+    fontSize: fonts.body,
+    fontWeight: fontWeights.semibold,
+  },
   followUpBlock: {
     gap: spacing.md,
   },
@@ -296,7 +495,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.dark,
     alignItems: "center",
     justifyContent: "center",
   },

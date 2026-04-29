@@ -1,7 +1,7 @@
 export type InputType = "pdf" | "docx" | "image" | "url";
 export type Market = "south_africa" | "kenya";
 export type RiskClassification = "low" | "medium" | "high";
-export type JobStatus = "payment_required" | "processing" | "complete";
+export type JobStatus = "pending" | "payment_pending" | "processing" | "completed" | "failed";
 export type PaymentStatus = "unpaid" | "paid";
 export type MessageRole = "user" | "assistant";
 
@@ -36,6 +36,19 @@ export interface PreviewIntakeRequest {
   disclaimer_accepted: boolean;
 }
 
+export interface UrlIntakeRequest {
+  url: string;
+  market: Market;
+  source_name?: string;
+  customer_email?: string;
+  disclaimer_accepted: boolean;
+}
+
+export interface CheckoutSessionRequest {
+  customer_email?: string;
+  callback_url?: string;
+}
+
 export interface PaymentQuote {
   provider: string;
   payment_status: PaymentStatus;
@@ -43,6 +56,42 @@ export interface PaymentQuote {
   checkout_url: string;
   display_amount: string;
   note: string;
+}
+
+export interface JobStatusCounts {
+  pending: number;
+  payment_pending: number;
+  processing: number;
+  completed: number;
+  failed: number;
+}
+
+export interface PaymentStatusCounts {
+  unpaid: number;
+  paid: number;
+}
+
+export interface MarketCounts {
+  south_africa: number;
+  kenya: number;
+}
+
+export interface RiskLevelCounts {
+  low: number;
+  medium: number;
+  high: number;
+}
+
+export interface JobMetricsResponse {
+  total_jobs: number;
+  attention_jobs: number;
+  analysis_ready_jobs: number;
+  payment_queue_jobs: number;
+  retry_queue_jobs: number;
+  statuses: JobStatusCounts;
+  payments: PaymentStatusCounts;
+  markets: MarketCounts;
+  risks: RiskLevelCounts;
 }
 
 export interface ConversationMessage {

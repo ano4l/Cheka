@@ -1,7 +1,7 @@
 export type InputType = "pdf" | "docx" | "image" | "url";
 export type Market = "south_africa" | "kenya";
 export type RiskClassification = "low" | "medium" | "high";
-export type JobStatus = "payment_required" | "processing" | "complete";
+export type JobStatus = "pending" | "payment_pending" | "processing" | "completed" | "failed";
 export type PaymentStatus = "unpaid" | "paid";
 export type MessageRole = "user" | "assistant";
 
@@ -34,6 +34,19 @@ export interface PreviewIntakeRequest {
   source_name?: string;
   customer_email?: string;
   disclaimer_accepted: boolean;
+}
+
+export interface UrlIntakeRequest {
+  url: string;
+  market: Market;
+  source_name?: string;
+  customer_email?: string;
+  disclaimer_accepted: boolean;
+}
+
+export interface CheckoutSessionRequest {
+  customer_email?: string;
+  callback_url?: string;
 }
 
 export interface PaymentQuote {

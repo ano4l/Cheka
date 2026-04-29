@@ -4,6 +4,17 @@ import re
 from dataclasses import dataclass
 
 from app.schemas.jobs import PreviewAnalysisResponse, RiskClassification, RiskFactor
+from app.core.config import settings
+
+try:
+    import instructor
+except ImportError:  # pragma: no cover - optional dependency in local dev
+    instructor = None
+
+try:
+    from anthropic import Anthropic
+except ImportError:  # pragma: no cover - optional dependency in local dev
+    Anthropic = None
 
 SENTENCE_SPLIT_PATTERN = re.compile(r"(?<=[.!?])\s+")
 
@@ -168,13 +179,13 @@ def _build_recommended_actions(factors: list[RiskFactor], risk_level: RiskClassi
 
     return actions[:3]
 
-
-import instructor
-from anthropic import Anthropic
-from app.core.config import settings
-
 def _build_claude_analysis(text: str, fallback_factors: list[RiskFactor]) -> PreviewAnalysisResponse:
-    if not settings.CLAUDE_API_KEY or settings.CLAUDE_API_KEY == "sk_test_mock":
+    if (
+        not settings.CLAUDE_API_KEY
+        or settings.CLAUDE_API_KEY == "sk_test_mock"
+        or instructor is None
+        or Anthropic is None
+    ):
         # Fallback to deterministic logic if no live key is mapped.
         return _build_preview_analysis_deterministic(text, fallback_factors)
 

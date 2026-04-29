@@ -25,6 +25,7 @@ cp apps/web/.env.example apps/web/.env.local
 ```
 
 Set `NEXT_PUBLIC_CHEKA_API_URL` if you want the web preview studio to call the FastAPI service instead of using its built-in demo engine.
+Set `NEXT_PUBLIC_ENABLE_ADMIN_STUDIO=true` if you want the internal admin route at `/admin` available in local development for filtered job review, queue and risk snapshots, manual payment confirmation, and retry handling.
 
 ### Mobile
 
@@ -48,6 +49,7 @@ This starter repo intentionally focuses on the product spine instead of pretendi
 - a polished web landing page with an interactive contract preview studio
 - a lightweight Expo shell for the mobile app
 - a FastAPI service with preview intake, mock payment unlock, job retrieval, and follow-up question endpoints
+- an internal web admin studio for filtered job monitoring, queue and risk snapshots, payment intervention, and retry handling
 - a cleaned-up documentation set covering product scope, architecture, and launch sequencing
 - a shared launch-oriented risk model implemented in both the API and the web demo flow
 
@@ -56,4 +58,4 @@ This starter repo intentionally focuses on the product spine instead of pretendi
 1. Replace the mock checkout step with live Paystack session creation and verification.
 2. Expand the API from text-only preview analysis into job-based document processing with storage, OCR, and AI orchestration.
 3. Connect Paystack, Supabase, Redis, and WhatsApp webhooks end to end.
-4. Add admin surfaces for job monitoring, payment reconciliation, and AI cost visibility.
+4. Expand admin surfaces for payment visibility, reconciliation, and AI cost visibility.

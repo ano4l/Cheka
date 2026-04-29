@@ -1,11 +1,19 @@
 from __future__ import annotations
 
-from anthropic import Anthropic
 from pydantic import BaseModel
-import instructor
 
-from app.schemas.jobs import PreviewAnalysisResponse, RiskClassification
+from app.schemas.jobs import PreviewAnalysisResponse
 from app.core.config import settings
+
+try:
+    import instructor
+except ImportError:  # pragma: no cover - optional dependency in local dev
+    instructor = None
+
+try:
+    from anthropic import Anthropic
+except ImportError:  # pragma: no cover - optional dependency in local dev
+    Anthropic = None
 
 class FollowUpPayload(BaseModel):
     answer: str
@@ -18,7 +26,12 @@ def _build_follow_up_answer_mock(analysis: PreviewAnalysisResponse, question: st
     return answer, suggested_next_step
 
 def build_follow_up_answer(analysis: PreviewAnalysisResponse, question: str) -> tuple[str, str | None]:
-    if not settings.CLAUDE_API_KEY or settings.CLAUDE_API_KEY == "sk_test_mock":
+    if (
+        not settings.CLAUDE_API_KEY
+        or settings.CLAUDE_API_KEY == "sk_test_mock"
+        or instructor is None
+        or Anthropic is None
+    ):
         return _build_follow_up_answer_mock(analysis, question)
         
     client = instructor.from_anthropic(Anthropic(api_key=settings.CLAUDE_API_KEY))
@@ -38,5 +51,4 @@ def build_follow_up_answer(analysis: PreviewAnalysisResponse, question: str) -> 
     )
     
     return resp.answer, resp.suggested_next_step
-
 

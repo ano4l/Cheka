@@ -363,7 +363,7 @@ export function createDemoJob(
   const ts = nowIso();
   return {
     job_id: randomId("job"),
-    status: "payment_required",
+    status: "pending",
     input_type: payload.input_type,
     market: payload.market,
     source_name: payload.source_name,
@@ -386,8 +386,30 @@ export function confirmDemoPayment(
   const analysis = buildPreviewAnalysis(text);
   return {
     ...job,
-    status: "complete",
+    status: "completed",
     payment: { ...job.payment, payment_status: "paid" },
+    analysis,
+    escalation_recommended: analysis.risk_level === "high",
+    updated_at: nowIso(),
+  };
+}
+
+export function retryDemoJob(
+  job: ContractJobResponse,
+  text: string,
+): ContractJobResponse {
+  if (job.status !== "failed") {
+    throw new Error("Only failed jobs can be retried.");
+  }
+
+  if (job.payment.payment_status !== "paid") {
+    throw new Error("Payment must be confirmed before retrying a failed job.");
+  }
+
+  const analysis = buildPreviewAnalysis(text);
+  return {
+    ...job,
+    status: "completed",
     analysis,
     escalation_recommended: analysis.risk_level === "high",
     updated_at: nowIso(),

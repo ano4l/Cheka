@@ -1,6 +1,6 @@
 from enum import StrEnum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, HttpUrl
 
 
 class InputType(StrEnum):
@@ -22,9 +22,11 @@ class RiskClassification(StrEnum):
 
 
 class JobStatus(StrEnum):
-    payment_required = "payment_required"
+    pending = "pending"
+    payment_pending = "payment_pending"
     processing = "processing"
-    complete = "complete"
+    completed = "completed"
+    failed = "failed"
 
 
 class PaymentStatus(StrEnum):
@@ -76,8 +78,23 @@ class PreviewIntakeRequest(BaseModel):
     )
 
 
+class UrlIntakeRequest(BaseModel):
+    url: HttpUrl
+    market: Market = Market.south_africa
+    source_name: str | None = Field(default=None, max_length=255)
+    customer_email: str | None = Field(default=None, max_length=255)
+    disclaimer_accepted: bool = Field(
+        description="The user must acknowledge the legal disclaimer before results are delivered."
+    )
+
+
 class ConfirmPaymentRequest(BaseModel):
     payment_reference: str | None = Field(default=None, max_length=80)
+
+
+class CheckoutSessionRequest(BaseModel):
+    customer_email: str | None = Field(default=None, max_length=255)
+    callback_url: str | None = Field(default=None, max_length=2048)
 
 
 class FollowUpRequest(BaseModel):
@@ -91,6 +108,42 @@ class PaymentQuote(BaseModel):
     checkout_url: str
     display_amount: str
     note: str
+
+
+class JobStatusCounts(BaseModel):
+    pending: int = 0
+    payment_pending: int = 0
+    processing: int = 0
+    completed: int = 0
+    failed: int = 0
+
+
+class PaymentStatusCounts(BaseModel):
+    unpaid: int = 0
+    paid: int = 0
+
+
+class MarketCounts(BaseModel):
+    south_africa: int = 0
+    kenya: int = 0
+
+
+class RiskLevelCounts(BaseModel):
+    low: int = 0
+    medium: int = 0
+    high: int = 0
+
+
+class JobMetricsResponse(BaseModel):
+    total_jobs: int = 0
+    attention_jobs: int = 0
+    analysis_ready_jobs: int = 0
+    payment_queue_jobs: int = 0
+    retry_queue_jobs: int = 0
+    statuses: JobStatusCounts = Field(default_factory=JobStatusCounts)
+    payments: PaymentStatusCounts = Field(default_factory=PaymentStatusCounts)
+    markets: MarketCounts = Field(default_factory=MarketCounts)
+    risks: RiskLevelCounts = Field(default_factory=RiskLevelCounts)
 
 
 class ConversationMessage(BaseModel):

@@ -21,7 +21,8 @@ dependencies = [
   "pdf2image",
   "httpx",
   "anthropic",
-  "instructor"
+  "instructor",
+  "python-multipart"
 ]
 
 [project.optional-dependencies]
@@ -37,4 +38,3 @@ testpaths = ["tests"]
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["app*"]
-

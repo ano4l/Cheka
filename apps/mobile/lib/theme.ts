@@ -2,28 +2,28 @@ import { Platform, type TextStyle, type ViewStyle } from "react-native";
 
 /* ── COLOR PALETTE ──────────────────────────────────────────────────────── */
 export const colors = {
-  bg: "#ffffff",
-  bgSoft: "#f7f7f7",
+  bg: "#f2f0eb",
+  bgSoft: "#e8e6e1",
   card: "#ffffff",
-  cardAlt: "#fafafa",
+  cardAlt: "#fafaf8",
 
-  textPrimary: "#0d1b12",
-  textSecondary: "#52665a",
-  textMuted: "#94a39a",
-  textOnAccent: "#0d1b12",
+  textPrimary: "#1c1917",
+  textSecondary: "#57534e",
+  textMuted: "#a8a29e",
+  textOnAccent: "#1c1917",
   textOnDark: "#ffffff",
 
-  primary: "#163326",
-  primaryLight: "#1e4a35",
+  primary: "#1c1917",
+  primaryLight: "#292524",
 
-  accent: "#c3d63e",
-  accentSoft: "#eef4cc",
-  accentBold: "#a8bc2a",
+  accent: "#facc15",
+  accentSoft: "#fef9c3",
+  accentBold: "#eab308",
 
   white: "#ffffff",
-  dark: "#163326",
-  darkCard: "#1e3a2c",
-  overlay: "rgba(13, 27, 18, 0.03)",
+  dark: "#1c1917",
+  darkCard: "#292524",
+  overlay: "rgba(28, 25, 23, 0.03)",
 
   riskLow: "#10b981",
   riskLowBg: "#ecfdf5",
@@ -39,9 +39,9 @@ export const colors = {
   warning: "#f59e0b",
   error: "#ef4444",
 
-  border: "rgba(13, 27, 18, 0.08)",
-  borderLight: "rgba(13, 27, 18, 0.04)",
-  separator: "rgba(13, 27, 18, 0.06)",
+  border: "rgba(28, 25, 23, 0.06)",
+  borderLight: "rgba(28, 25, 23, 0.04)",
+  separator: "rgba(28, 25, 23, 0.05)",
 };
 
 /* ── SPACING ────────────────────────────────────────────────────────────── */
@@ -57,11 +57,11 @@ export const spacing = {
 
 /* ── RADII ──────────────────────────────────────────────────────────────── */
 export const radii = {
-  xs: 6,
-  sm: 10,
-  md: 16,
-  lg: 22,
-  xl: 28,
+  xs: 8,
+  sm: 12,
+  md: 18,
+  lg: 24,
+  xl: 32,
   full: 999,
 };
 
@@ -105,13 +105,13 @@ export function shadow(elevation: 1 | 2 | 3 | 4): ViewStyle {
     return { elevation: elevation * 1.5 };
   }
   const config = {
-    1: { y: 1, blur: 3, opacity: 0.04 },
-    2: { y: 2, blur: 8, opacity: 0.06 },
-    3: { y: 4, blur: 16, opacity: 0.08 },
-    4: { y: 8, blur: 24, opacity: 0.1 },
+    1: { y: 2, blur: 8, opacity: 0.04 },
+    2: { y: 4, blur: 16, opacity: 0.05 },
+    3: { y: 8, blur: 32, opacity: 0.06 },
+    4: { y: 12, blur: 48, opacity: 0.08 },
   }[elevation];
   return {
-    shadowColor: "#0d1b12",
+    shadowColor: "#1c1917",
     shadowOffset: { width: 0, height: config.y },
     shadowOpacity: config.opacity,
     shadowRadius: config.blur,

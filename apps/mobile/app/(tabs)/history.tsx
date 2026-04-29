@@ -4,9 +4,9 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AnimatedPressable } from "../../components/AnimatedPressable";
+import { RiskBadge } from "../../components/RiskBadge";
 import { useJobsStore } from "../../lib/store";
 import { colors, fonts, fontWeights, radii, spacing } from "../../lib/theme";
-import { RiskBadge } from "../../components/RiskBadge";
 
 const marketLabels: Record<string, string> = {
   south_africa: "South Africa",
@@ -16,11 +16,19 @@ const marketLabels: Record<string, string> = {
 export default function HistoryScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const jobs = useJobsStore((s) => s.jobs);
+  const jobs = useJobsStore((state) => state.jobs);
 
   if (jobs.length === 0) {
     return (
-      <View style={[styles.emptyContainer, { paddingTop: insets.top }]}>
+      <View
+        style={[
+          styles.emptyContainer,
+          {
+            paddingTop: insets.top,
+            paddingBottom: Math.max(insets.bottom, spacing.lg) + 120,
+          },
+        ]}
+      >
         <View style={styles.emptyIconWrap}>
           <Ionicons name="time-outline" size={32} color={colors.textMuted} />
         </View>
@@ -43,7 +51,10 @@ export default function HistoryScreen() {
       style={styles.scroll}
       contentContainerStyle={[
         styles.container,
-        { paddingTop: insets.top + 12 },
+        {
+          paddingTop: insets.top + 12,
+          paddingBottom: Math.max(insets.bottom, spacing.lg) + 120,
+        },
       ]}
       showsVerticalScrollIndicator={false}
     >
@@ -53,41 +64,48 @@ export default function HistoryScreen() {
       </View>
 
       <View style={styles.listGroup}>
-        {jobs.map((job, idx) => {
-          const isComplete = job.status === "complete";
+        {jobs.map((job, index) => {
+          const isComplete = job.status === "completed";
+          const isFailed = job.status === "failed";
+          const iconName = isComplete
+            ? "checkmark-circle"
+            : isFailed
+              ? "close-circle"
+              : "hourglass-outline";
+          const iconColor = isComplete
+            ? colors.success
+            : isFailed
+              ? colors.riskHigh
+              : colors.textMuted;
+          const iconBg = isComplete
+            ? colors.accentSoft
+            : isFailed
+              ? colors.riskHighBg
+              : colors.bgSoft;
+
           return (
             <AnimatedPressable
               key={job.job_id}
               style={[
                 styles.row,
-                idx < jobs.length - 1 && styles.rowBorder,
+                index < jobs.length - 1 && styles.rowBorder,
               ]}
               onPress={() => router.push(`/job/${job.job_id}`)}
             >
               <View
                 style={[
                   styles.rowIcon,
-                  {
-                    backgroundColor: isComplete ? colors.accentSoft : colors.bgSoft,
-                  },
+                  { backgroundColor: iconBg },
                 ]}
               >
-                <Ionicons
-                  name={isComplete ? "checkmark-circle" : "hourglass-outline"}
-                  size={18}
-                  color={isComplete ? colors.success : colors.textMuted}
-                />
+                <Ionicons name={iconName} size={18} color={iconColor} />
               </View>
               <View style={styles.rowContent}>
                 <Text style={styles.rowTitle} numberOfLines={1}>
                   {job.source_name ?? "Unnamed contract"}
                 </Text>
                 <Text style={styles.rowMeta}>
-                  {marketLabels[job.market] ?? job.market}
-                  {" · "}
-                  {job.input_type.toUpperCase()}
-                  {" · "}
-                  {new Date(job.created_at).toLocaleDateString()}
+                  {`${marketLabels[job.market] ?? job.market} - ${job.input_type.toUpperCase()} - ${new Date(job.created_at).toLocaleDateString()}`}
                 </Text>
               </View>
               {job.analysis ? (
@@ -97,7 +115,11 @@ export default function HistoryScreen() {
                   compact
                 />
               ) : (
-                <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+                <Ionicons
+                  name="chevron-forward"
+                  size={18}
+                  color={colors.textMuted}
+                />
               )}
             </AnimatedPressable>
           );
@@ -111,10 +133,8 @@ const styles = StyleSheet.create({
   scroll: { flex: 1, backgroundColor: colors.bg },
   container: {
     paddingHorizontal: spacing.lg,
-    paddingBottom: spacing.xxxl,
     gap: spacing.lg,
   },
-
   header: {
     gap: 4,
   },
@@ -129,13 +149,12 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.medium,
     color: colors.textMuted,
   },
-
   emptyContainer: {
     flex: 1,
     backgroundColor: colors.bg,
     alignItems: "center",
     justifyContent: "center",
-    padding: spacing.xl,
+    paddingHorizontal: spacing.xl,
     gap: spacing.md,
   },
   emptyIconWrap: {
@@ -158,7 +177,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   emptyBtn: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.dark,
     borderRadius: radii.md,
     paddingHorizontal: 28,
     paddingVertical: 14,
@@ -169,7 +188,6 @@ const styles = StyleSheet.create({
     fontSize: fonts.body,
     fontWeight: fontWeights.semibold,
   },
-
   listGroup: {
     backgroundColor: colors.bgSoft,
     borderRadius: radii.md,

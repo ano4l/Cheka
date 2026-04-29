@@ -13,16 +13,22 @@ from app.schemas.jobs import (
     FollowUpRequest,
     FollowUpResponse,
     InputType,
+    JobMetricsResponse,
+    JobStatusCounts,
     JobStatus,
+    MarketCounts,
     Market,
     MessageRole,
+    PaymentStatusCounts,
     PaymentQuote,
     PaymentStatus,
     PreviewAnalysisResponse,
     PreviewIntakeRequest,
+    RiskLevelCounts,
     RiskClassification,
 )
 from app.services.follow_up import build_follow_up_answer
+from app.services.job_state_machine import InvalidJobTransitionError, ensure_transition
 from app.services.risk_engine import build_preview_analysis
 
 
@@ -36,6 +42,10 @@ class JobNotFoundError(KeyError):
 
 class PaymentRequiredError(RuntimeError):
     """Raised when a protected action happens before payment is confirmed."""
+
+
+class InvalidJobTransition(ValueError):
+    """Raised when a job is asked to move to an invalid state."""
 
 
 @dataclass
@@ -99,6 +109,14 @@ def _build_payment_quote(market: Market) -> PaymentQuote:
     )
 
 
+def _job_needs_attention(status: JobStatus, payment_status: PaymentStatus) -> bool:
+    if status == JobStatus.failed:
+        return True
+    if payment_status == PaymentStatus.unpaid:
+        return status in {JobStatus.pending, JobStatus.payment_pending}
+    return status != JobStatus.completed
+
+
 class PreviewJobStore:
     def __init__(self) -> None:
         self._jobs: dict[str, JobRecord] = {}
@@ -119,7 +137,7 @@ class PreviewJobStore:
             source_name=payload.source_name,
             customer_email=payload.customer_email,
             payment=_build_payment_quote(payload.market),
-            status=JobStatus.payment_required,
+            status=JobStatus.pending,
             created_at=timestamp,
             updated_at=timestamp,
         )
@@ -133,23 +151,182 @@ class PreviewJobStore:
             record = self._get_record(job_id)
             return record.to_response()
 
+    def _filtered_records(
+        self,
+        *,
+        status: JobStatus | None = None,
+        payment_status: PaymentStatus | None = None,
+        market: Market | None = None,
+    ) -> list[JobRecord]:
+        records = list(self._jobs.values())
+        if status is not None:
+            records = [record for record in records if record.status == status]
+        if payment_status is not None:
+            records = [record for record in records if record.payment.payment_status == payment_status]
+        if market is not None:
+            records = [record for record in records if record.market == market]
+        return records
+
+    def list_jobs(
+        self,
+        *,
+        status: JobStatus | None = None,
+        payment_status: PaymentStatus | None = None,
+        market: Market | None = None,
+        limit: int = 20,
+    ) -> list[ContractJobResponse]:
+        with self._lock:
+            records = self._filtered_records(
+                status=status,
+                payment_status=payment_status,
+                market=market,
+            )
+            records.sort(key=lambda record: record.created_at, reverse=True)
+            return [record.to_response() for record in records[:limit]]
+
+    def get_job_metrics(
+        self,
+        *,
+        status: JobStatus | None = None,
+        payment_status: PaymentStatus | None = None,
+        market: Market | None = None,
+    ) -> JobMetricsResponse:
+        with self._lock:
+            records = self._filtered_records(
+                status=status,
+                payment_status=payment_status,
+                market=market,
+            )
+
+            status_counts = {job_status.value: 0 for job_status in JobStatus}
+            payment_counts = {payment_state.value: 0 for payment_state in PaymentStatus}
+            market_counts = {market_name.value: 0 for market_name in Market}
+            risk_counts = {risk_level.value: 0 for risk_level in RiskClassification}
+            attention_jobs = 0
+            analysis_ready_jobs = 0
+            payment_queue_jobs = 0
+            retry_queue_jobs = 0
+
+            for record in records:
+                status_counts[record.status.value] += 1
+                payment_counts[record.payment.payment_status.value] += 1
+                market_counts[record.market.value] += 1
+
+                if _job_needs_attention(record.status, record.payment.payment_status):
+                    attention_jobs += 1
+                if record.analysis is not None:
+                    analysis_ready_jobs += 1
+                    risk_counts[record.analysis.risk_level.value] += 1
+                if (
+                    record.payment.payment_status == PaymentStatus.unpaid
+                    and record.status in {JobStatus.pending, JobStatus.payment_pending}
+                ):
+                    payment_queue_jobs += 1
+                if (
+                    record.payment.payment_status == PaymentStatus.paid
+                    and record.status == JobStatus.failed
+                ):
+                    retry_queue_jobs += 1
+
+            return JobMetricsResponse(
+                total_jobs=len(records),
+                attention_jobs=attention_jobs,
+                analysis_ready_jobs=analysis_ready_jobs,
+                payment_queue_jobs=payment_queue_jobs,
+                retry_queue_jobs=retry_queue_jobs,
+                statuses=JobStatusCounts(**status_counts),
+                payments=PaymentStatusCounts(**payment_counts),
+                markets=MarketCounts(**market_counts),
+                risks=RiskLevelCounts(**risk_counts),
+            )
+
+    def update_checkout(
+        self,
+        job_id: str,
+        *,
+        customer_email: str | None = None,
+        payment_reference: str | None = None,
+        checkout_url: str | None = None,
+        note: str | None = None,
+    ) -> ContractJobResponse:
+        with self._lock:
+            record = self._get_record(job_id)
+            self._transition(record, JobStatus.payment_pending)
+            if customer_email:
+                record.customer_email = customer_email
+            if payment_reference:
+                record.payment.payment_reference = payment_reference
+            if checkout_url:
+                record.payment.checkout_url = checkout_url
+            if note:
+                record.payment.note = note
+            record.updated_at = _now()
+            return record.to_response()
+
     def confirm_payment(self, job_id: str, payload: ConfirmPaymentRequest) -> ContractJobResponse:
         with self._lock:
             record = self._get_record(job_id)
+            if record.status == JobStatus.completed:
+                return record.to_response()
             if payload.payment_reference:
                 record.payment.payment_reference = payload.payment_reference
             record.payment.payment_status = PaymentStatus.paid
-            record.status = JobStatus.processing
-            record.updated_at = _now()
-            record.analysis = build_preview_analysis(record.text)
-            record.status = JobStatus.complete
+            self._transition(record, JobStatus.processing)
             record.updated_at = _now()
             return record.to_response()
+
+    def process_job(self, job_id: str) -> ContractJobResponse:
+        with self._lock:
+            record = self._get_record(job_id)
+            if record.status == JobStatus.completed:
+                return record.to_response()
+            if record.payment.payment_status != PaymentStatus.paid:
+                raise PaymentRequiredError("Payment must be confirmed before processing can begin.")
+            self._transition(record, JobStatus.processing)
+
+        try:
+            analysis = build_preview_analysis(record.text)
+        except Exception as exc:
+            with self._lock:
+                record = self._get_record(job_id)
+                self._transition(record, JobStatus.failed)
+                record.updated_at = _now()
+            raise exc
+
+        with self._lock:
+            record = self._get_record(job_id)
+            record.analysis = analysis
+            self._transition(record, JobStatus.completed)
+            record.updated_at = _now()
+            return record.to_response()
+
+    def retry_job(self, job_id: str) -> ContractJobResponse:
+        with self._lock:
+            record = self._get_record(job_id)
+            if record.status != JobStatus.failed:
+                raise InvalidJobTransition("Only failed jobs can be retried.")
+            if record.payment.payment_status != PaymentStatus.paid:
+                raise PaymentRequiredError("Payment must be confirmed before a failed job can be retried.")
+            record.analysis = None
+            self._transition(record, JobStatus.processing)
+            record.updated_at = _now()
+            return record.to_response()
+
+    def find_job_id_by_payment_reference(self, payment_reference: str) -> str | None:
+        with self._lock:
+            for record in self._jobs.values():
+                if record.payment.payment_reference == payment_reference:
+                    return record.job_id
+        return None
 
     def ask_follow_up(self, job_id: str, payload: FollowUpRequest) -> FollowUpResponse:
         with self._lock:
             record = self._get_record(job_id)
-            if record.payment.payment_status != PaymentStatus.paid or record.analysis is None:
+            if (
+                record.payment.payment_status != PaymentStatus.paid
+                or record.analysis is None
+                or record.status != JobStatus.completed
+            ):
                 raise PaymentRequiredError("Payment must be confirmed before follow-up questions are available.")
 
             if record.questions_used >= record.free_limit:
@@ -197,6 +374,13 @@ class PreviewJobStore:
             return self._jobs[job_id]
         except KeyError as exc:
             raise JobNotFoundError(job_id) from exc
+
+    def _transition(self, record: JobRecord, target: JobStatus) -> None:
+        try:
+            ensure_transition(record.status, target)
+        except InvalidJobTransitionError as exc:
+            raise InvalidJobTransition(str(exc)) from exc
+        record.status = target
 
 
 preview_job_store = PreviewJobStore()

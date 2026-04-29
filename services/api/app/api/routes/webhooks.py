@@ -3,12 +3,11 @@ from fastapi.responses import PlainTextResponse
 import json
 
 from app.services.paystack import paystack_service
+from app.services.job_processor import run_job_processing
+from app.services.job_store_selector import get_job_store
 from app.services.whatsapp import whatsapp_service
 from app.core.config import settings
-from app.core.supabase import supabase
-from app.schemas.jobs import JobStatus, PaymentStatus, InputType
-from app.services.document_extractor import process_document
-from app.schemas.jobs import PreviewIntakeRequest, Market
+from app.schemas.jobs import ConfirmPaymentRequest
 
 router = APIRouter(prefix="/webhooks", tags=["webhooks"])
 
@@ -76,20 +75,10 @@ async def paystack_webhook(request: Request, background_tasks: BackgroundTasks):
         reference = data.get("reference")
         
         if reference:
-            # Update the payment record row
-            payment_res = supabase.table("payments").update({
-                "status": PaymentStatus.paid.value
-            }).eq("reference", reference).execute()
-            
-            if payment_res.data:
-                job_id = payment_res.data[0]["job_id"]
-                
-                # Update the job status
-                supabase.table("jobs").update({
-                    "status": JobStatus.processing.value
-                }).eq("id", job_id).execute()
-                
-                # NOTE: Trigger background task to process document & analysis here.
-                # Find associated whatsapp number if exists, notify them.
+            store = get_job_store()
+            job_id = store.find_job_id_by_payment_reference(reference)
+            if job_id:
+                store.confirm_payment(job_id, ConfirmPaymentRequest(payment_reference=reference))
+                background_tasks.add_task(run_job_processing, store, job_id)
                 
     return {"status": "ok"}
