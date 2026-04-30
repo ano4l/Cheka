@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --bg: #f7f8fa;
+  --bg: #f6f7f9;
   --surface: #ffffff;
   --surface-muted: #f4f5f7;
   --border: #e5e7eb;
@@ -78,26 +78,26 @@ body {
   /* Glass card — subtle highlight + blur */
   .glass {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.56) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
+      linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.76) 100%);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
     box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.55) inset,
-      0 8px 24px -10px rgba(15, 23, 42, 0.10);
-    @apply rounded-3xl;
+      0 1px 0 rgba(255, 255, 255, 0.7) inset,
+      0 10px 24px -18px rgba(15, 23, 42, 0.22);
+    @apply rounded-lg;
   }
 
   .glass-strong {
     background:
       linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.78) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(226, 232, 240, 0.9);
     backdrop-filter: blur(18px) saturate(160%);
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.7) inset,
       0 12px 36px -12px rgba(15, 23, 42, 0.12);
-    @apply rounded-3xl;
+    @apply rounded-lg;
   }
 
   .glass-dark {
@@ -109,18 +109,17 @@ body {
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.05) inset,
       0 12px 36px -12px rgba(0, 0, 0, 0.35);
-    @apply rounded-3xl text-white;
+    @apply rounded-lg text-white;
   }
 
   /* Atmospheric backdrops */
   .bg-cream-canvas {
-    background: linear-gradient(140deg, #fdf9ec 0%, #f5ecd3 55%, #efe4c0 100%);
+    background: linear-gradient(140deg, #f8fafc 0%, #f3f6f8 54%, #eef7f4 100%);
   }
   .bg-cream-aurora {
     background:
-      radial-gradient(50% 60% at 12% 0%, rgba(245, 211, 74, 0.20) 0%, transparent 60%),
-      radial-gradient(40% 50% at 100% 8%, rgba(15, 118, 110, 0.10) 0%, transparent 60%),
-      linear-gradient(155deg, #fdf9ec 0%, #f5ecd3 55%, #efe4c0 100%);
+      linear-gradient(180deg, rgba(15, 118, 110, 0.08) 0%, rgba(15, 118, 110, 0) 22rem),
+      linear-gradient(155deg, #f8fafc 0%, #f4f7f8 52%, #eef7f4 100%);
   }
 
   /* ---- Inputs ---- */
@@ -214,6 +213,14 @@ body {
 
   .badge {
     @apply inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .panel-header {
+    @apply flex items-center justify-between gap-3 border-b border-slate-200/70 px-4 py-3 sm:px-5;
+  }
+
+  .icon-tile {
+    @apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200/80 bg-white/80 text-ink shadow-soft;
   }
 
   .label {

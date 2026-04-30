@@ -209,12 +209,6 @@ export function DashboardSidebar(props: DashboardSidebarProps) {
 
 export function MobileSidebarDrawer(props: DashboardSidebarProps) {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
-
-  // Close drawer on route change
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   // Lock body scroll when open
   useEffect(() => {

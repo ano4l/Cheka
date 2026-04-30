@@ -15,7 +15,7 @@ export interface DemoDocument {
 export const demoDocuments: DemoDocument[] = [
   {
     id: "rev_8x21",
-    name: "Hodari Realty · 12-month lease.pdf",
+    name: "Hodari Realty - 12-month lease.pdf",
     type: "Lease",
     market: "Kenya",
     riskScore: 72,
@@ -54,7 +54,7 @@ export const demoDocuments: DemoDocument[] = [
   },
   {
     id: "rev_8v40",
-    name: "Vendor NDA · Kibanda Foods.pdf",
+    name: "Vendor NDA - Kibanda Foods.pdf",
     type: "NDA",
     market: "Kenya",
     riskScore: 24,
@@ -106,14 +106,14 @@ export const demoActivity: ActivityEvent[] = [
     id: "act_1",
     kind: "high_risk",
     title: "High-risk contract flagged",
-    meta: "Hodari Realty · 12-month lease.pdf · score 72",
+    meta: "Hodari Realty - 12-month lease.pdf / score 72",
     when: "2 hours ago",
   },
   {
     id: "act_2",
     kind: "follow_up",
     title: "Follow-up answered",
-    meta: "“Can the landlord raise rent mid-lease?”",
+    meta: "Can the landlord raise rent mid-lease?",
     when: "2 hours ago",
   },
   {
@@ -127,14 +127,14 @@ export const demoActivity: ActivityEvent[] = [
     id: "act_4",
     kind: "review_completed",
     title: "Review completed",
-    meta: "Junior dev offer letter.pdf · score 18",
+    meta: "Junior dev offer letter.pdf / score 18",
     when: "Yesterday, 16:45",
   },
   {
     id: "act_5",
     kind: "credit_added",
     title: "5 review credits granted",
-    meta: "Welcome bonus · expires May 28",
+    meta: "Welcome bonus / expires May 28",
     when: "Apr 24",
   },
 ];

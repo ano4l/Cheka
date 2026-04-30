@@ -83,7 +83,6 @@ export function PreviewStudio() {
   const [isPending, setIsPending] = useState(false);
   const [pendingLabel, setPendingLabel] = useState<string | null>(null);
   const [apiStatus, setApiStatus] = useState<ApiStatus>({ openai_enabled: false, external_api: false });
-  const [stage, setStage] = useState<Stage>("intake");
   const conversationRef = useRef<HTMLDivElement>(null);
 
   const externalApi = usingExternalApi();
@@ -102,26 +101,18 @@ export function PreviewStudio() {
   }, []);
 
   useEffect(() => {
-    if (!job) {
-      setStage("intake");
-      return;
-    }
-    if (job.analysis) {
-      setStage("ask");
-      return;
-    }
-    if (job.payment.payment_status === "paid") {
-      setStage("analysis");
-      return;
-    }
-    setStage("checkout");
-  }, [job]);
-
-  useEffect(() => {
     if (job?.conversation && conversationRef.current) {
       conversationRef.current.scrollTo({ top: conversationRef.current.scrollHeight, behavior: "smooth" });
     }
   }, [job?.conversation]);
+
+  const stage: Stage = !job
+    ? "intake"
+    : job.analysis
+      ? "ask"
+      : job.payment.payment_status === "paid"
+        ? "analysis"
+        : "checkout";
 
   const canCreatePreview =
     inputType === "url"

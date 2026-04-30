@@ -18,7 +18,7 @@ export async function DashboardTopbar({ title, subtitle, breadcrumbs, primaryAct
   const initials = session ? getInitials(session.name) : "";
 
   return (
-    <div className="sticky top-0 z-30 border-b border-white/40 bg-white/55 backdrop-blur-xl">
+    <div className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/75 backdrop-blur-xl">
       <div className="flex h-14 items-center justify-between gap-3 px-4 sm:h-16 sm:px-6">
         <div className="flex min-w-0 items-center gap-3">
           {session ? (
@@ -31,15 +31,15 @@ export async function DashboardTopbar({ title, subtitle, breadcrumbs, primaryAct
           ) : null}
           <div className="min-w-0">
             {breadcrumbs && breadcrumbs.length > 0 ? (
-              <nav className="hidden items-center gap-1 text-[11px] text-muted sm:flex">
+              <nav className="hidden items-center gap-1 text-[11px] text-muted sm:flex" aria-label="Breadcrumb">
                 {breadcrumbs.map((crumb, idx) => (
-                  <span className="flex items-center gap-1" key={idx}>
+                  <span className="flex items-center gap-1" key={`${crumb.label}-${idx}`}>
                     {crumb.href ? (
                       <Link className="transition hover:text-ink" href={crumb.href}>
                         {crumb.label}
                       </Link>
                     ) : (
-                      <span className="text-muted">{crumb.label}</span>
+                      <span>{crumb.label}</span>
                     )}
                     {idx < breadcrumbs.length - 1 ? (
                       <svg viewBox="0 0 24 24" className="h-3 w-3 text-muted" fill="none" stroke="currentColor" strokeWidth="2">
@@ -58,18 +58,18 @@ export async function DashboardTopbar({ title, subtitle, breadcrumbs, primaryAct
         <div className="flex items-center gap-2">
           <button
             aria-label="Search"
-            className="hidden h-9 items-center gap-2 rounded-full border border-white/70 bg-white/65 px-3 text-xs text-muted backdrop-blur transition hover:bg-white/85 hover:text-ink md:inline-flex"
+            className="hidden h-9 items-center gap-2 rounded-full border border-slate-200/80 bg-white/80 px-3 text-xs text-muted backdrop-blur transition hover:bg-white hover:text-ink md:inline-flex"
             type="button"
           >
             <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.3-4.3M11 19a8 8 0 100-16 8 8 0 000 16z" />
             </svg>
             <span>Search</span>
-            <kbd className="rounded-full border border-white/80 bg-white/80 px-1.5 font-mono text-[10px]">⌘K</kbd>
+            <kbd className="rounded-full border border-slate-200 bg-slate-50 px-1.5 font-mono text-[10px]">Ctrl K</kbd>
           </button>
           <button
             aria-label="Notifications"
-            className="touch-area relative inline-flex items-center justify-center rounded-full border border-white/70 bg-white/65 text-muted backdrop-blur transition hover:bg-white/85 hover:text-ink"
+            className="touch-area relative inline-flex items-center justify-center rounded-full border border-slate-200/80 bg-white/80 text-muted backdrop-blur transition hover:bg-white hover:text-ink"
             type="button"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
