@@ -30,12 +30,6 @@ const quickActions = [
   },
 ];
 
-const reviewChecklist = [
-  "Termination and renewal windows",
-  "Fees, penalties, and payment triggers",
-  "Liability, indemnity, and dispute venue",
-];
-
 export default async function DashboardPage() {
   const session = await getSession();
   const firstName = session?.name.split(" ")[0] ?? "there";
@@ -44,7 +38,6 @@ export default async function DashboardPage() {
   const avgScore = Math.round(demoDocuments.reduce((sum, d) => sum + d.riskScore, 0) / demoDocuments.length);
   const totalFlags = demoDocuments.reduce((sum, d) => sum + d.flags, 0);
   const highRisk = demoDocuments.filter((d) => d.riskLevel === "high").length;
-  const topRisk = [...demoDocuments].sort((a, b) => b.riskScore - a.riskScore)[0];
 
   return (
     <>
@@ -56,62 +49,6 @@ export default async function DashboardPage() {
       />
 
       <div className="flex-1 px-3.5 py-4 sm:px-6 sm:py-6">
-        <section className="mb-5 grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_360px]">
-          <div className="glass-strong p-5 sm:p-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-              <div className="max-w-2xl">
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-accent">
-                  {session?.workspace ?? "Workspace"} command center
-                </p>
-                <h1 className="mt-2 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-                  Prioritize the contracts that can cost you money.
-                </h1>
-                <p className="mt-2 text-sm leading-6 text-muted">
-                  Cheka turns uploads into risk scores, clause evidence, and follow-up answers so you can decide what
-                  to sign, renegotiate, or escalate.
-                </p>
-              </div>
-              <Link className="btn-primary h-11 w-full px-4 text-sm sm:h-10 sm:w-auto" href="/dashboard/new">
-                Start review
-                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m0 0l-5-5m5 5l-5 5" />
-                </svg>
-              </Link>
-            </div>
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              {reviewChecklist.map((item) => (
-                <div className="rounded-lg border border-slate-200/80 bg-white/70 p-3" key={item}>
-                  <svg viewBox="0 0 20 20" className="h-4 w-4 text-accent" fill="currentColor">
-                    <path fillRule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 111.4-1.4L9 11.6l6.3-6.3a1 1 0 011.4 0z" clipRule="evenodd" />
-                  </svg>
-                  <p className="mt-2 text-xs font-medium leading-5 text-ink">{item}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <aside className="glass p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-semibold text-muted">Highest current risk</p>
-                <h2 className="mt-1 text-lg font-semibold text-ink">{topRisk?.riskScore ?? 0}/100</h2>
-              </div>
-              <span className="badge border-rose-200 bg-rose-50 text-rose-800">{highRisk} urgent</span>
-            </div>
-            {topRisk ? (
-              <div className="mt-4 rounded-lg border border-slate-200/80 bg-white/75 p-4">
-                <p className="truncate text-sm font-semibold text-ink">{topRisk.name}</p>
-                <p className="mt-1 text-xs text-muted">
-                  {topRisk.flags} flags / {topRisk.market} / {topRisk.shortReviewedAt}
-                </p>
-                <Link className="mt-3 inline-flex text-xs font-semibold text-accent hover:text-accent-strong" href={`/dashboard/documents/${topRisk.id}`}>
-                  Open risk brief
-                </Link>
-              </div>
-            ) : null}
-          </aside>
-        </section>
-
         <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:gap-4 xl:grid-cols-4">
           <KpiCard delta={{ value: "+3 vs last week", trend: "up" }} label="Reviews this month" value={String(reviewedThisMonth)} />
           <KpiCard delta={{ value: "+6 pts", trend: "down" }} hint="risk is trending up" label="Average risk score" value={`${avgScore}/100`} />

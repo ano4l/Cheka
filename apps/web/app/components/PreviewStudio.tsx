@@ -374,18 +374,36 @@ export function PreviewStudio() {
         </ol>
       </div>
 
-      <div className="grid gap-0 lg:grid-cols-[1fr_1.05fr]">
-        <section className="border-b border-white/40 p-3.5 sm:p-5 lg:border-b-0 lg:border-r" id="preview-form">
+      {(feedback || error) && stage === "intake" ? (
+        <div className="px-3.5 pt-3 sm:px-5">
+          {feedback ? (
+            <div className="mx-auto max-w-3xl animate-fade-up rounded-xl border border-emerald-200/70 bg-emerald-50/85 px-3 py-2 text-xs text-emerald-900 backdrop-blur">
+              {feedback}
+            </div>
+          ) : null}
+          {error ? (
+            <div className="mx-auto max-w-3xl animate-fade-up rounded-xl border border-rose-200/70 bg-rose-50/85 px-3 py-2 text-xs text-rose-900 backdrop-blur">
+              {error}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
+      <div className="p-3.5 sm:p-5">
+        <section
+          className={`mx-auto max-w-3xl ${stage === "intake" ? "block" : "hidden"}`}
+          id="preview-form"
+        >
           <div className="mb-4 rounded-xl border border-slate-200/80 bg-white/70 p-3 shadow-soft">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <p className="text-sm font-semibold text-ink">Upload contract</p>
                 <p className="mt-1 text-xs leading-5 text-muted">
-                  Start with a file, a sample contract, or pasted text. Cheka will extract the clauses and prepare a review.
+                  Start with a file, a sample contract, or pasted text. The next step confirms the review before results are shown.
                 </p>
               </div>
               <span className="rounded-full border border-accent/20 bg-accent-soft/70 px-2.5 py-1 text-[11px] font-semibold text-accent-strong">
-                Private preview
+                Step 1 of 3
               </span>
             </div>
             <div className="mt-3 flex flex-wrap gap-1.5">
@@ -509,7 +527,7 @@ export function PreviewStudio() {
                 </>
               ) : (
                 <>
-                  Create preview job
+                  Continue to confirmation
                   <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m0 0l-5-5m5 5l-5 5" />
                   </svg>
@@ -519,17 +537,23 @@ export function PreviewStudio() {
           </div>
         </section>
 
-        <section className="bg-white/30 p-3.5 sm:p-5">
-          <JobStatusCard
-            externalApi={externalApi}
-            isPending={isPending}
-            job={job}
-            market={market}
-            onConfirmPayment={handleUnlockAnalysis}
-            onPrepareCheckout={handlePrepareCheckout}
-            pendingLabel={pendingLabel}
-            sourceName={sourceName}
-          />
+        <section
+          className={`mx-auto ${job?.analysis ? "max-w-6xl" : "max-w-2xl"} ${
+            stage === "intake" ? "hidden" : "block"
+          }`}
+        >
+          {!job?.analysis ? (
+            <JobStatusCard
+              externalApi={externalApi}
+              isPending={isPending}
+              job={job}
+              market={market}
+              onConfirmPayment={handleUnlockAnalysis}
+              onPrepareCheckout={handlePrepareCheckout}
+              pendingLabel={pendingLabel}
+              sourceName={sourceName}
+            />
+          ) : null}
 
           {feedback ? (
             <div className="mt-3 animate-fade-up rounded-2xl border border-emerald-200/70 bg-emerald-50/85 px-3 py-2 text-xs text-emerald-900 backdrop-blur">
