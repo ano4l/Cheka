@@ -34,7 +34,7 @@ export default async function HelpPage() {
         title="Help & support"
       />
 
-      <div className="flex-1 px-4 py-5 sm:px-6 sm:py-6">
+      <div className="flex-1 px-3.5 py-4 sm:px-6 sm:py-6">
         <div className="grid gap-4 lg:grid-cols-[1fr_300px] lg:gap-5">
           <div className="glass overflow-hidden">
             <div className="border-b border-white/40 px-4 py-3 sm:px-5">

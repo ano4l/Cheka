@@ -36,7 +36,7 @@ interface Props {
 export function DocumentRow({ doc }: Props) {
   return (
     <Link
-      className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 transition hover:bg-white/70 focus-visible:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:grid-cols-[auto_minmax(0,1.3fr)_160px_110px_120px_auto] sm:gap-4 sm:px-5"
+      className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-3 py-3.5 transition hover:bg-white/70 focus-visible:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:grid-cols-[auto_minmax(0,1.3fr)_160px_110px_120px_auto] sm:gap-4 sm:px-5 sm:py-3"
       href={`/dashboard/documents/${doc.id}`}
     >
       <span className="icon-tile text-[11px] font-bold tracking-wide text-accent">{typeIcon[doc.type]}</span>

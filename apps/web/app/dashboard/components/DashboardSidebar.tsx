@@ -201,7 +201,7 @@ function SidebarBody({ initials, name, workspace, email, onNavigate }: Dashboard
 
 export function DashboardSidebar(props: DashboardSidebarProps) {
   return (
-    <aside className="hidden h-screen w-64 shrink-0 border-r border-white/40 bg-white/45 backdrop-blur-xl lg:sticky lg:top-0 lg:block">
+    <aside className="hidden h-screen w-64 shrink-0 border-r border-white/50 bg-white/42 backdrop-blur-2xl lg:sticky lg:top-0 lg:block">
       <SidebarBody {...props} />
     </aside>
   );
@@ -243,7 +243,7 @@ export function MobileSidebarDrawer(props: DashboardSidebarProps) {
             onClick={() => setOpen(false)}
             type="button"
           />
-          <div className="absolute inset-y-0 left-0 w-72 max-w-[85vw] border-r border-white/40 bg-cream-aurora shadow-glass-lg animate-fade-up">
+          <div className="absolute inset-y-0 left-0 w-72 max-w-[88vw] border-r border-white/50 bg-white/55 shadow-glass-lg backdrop-blur-2xl animate-fade-up">
             <button
               aria-label="Close navigation"
               className="touch-area absolute right-2 top-2 z-10 inline-flex items-center justify-center rounded-full bg-white/70 text-muted hover:text-ink"

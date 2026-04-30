@@ -18,7 +18,7 @@ export async function DashboardTopbar({ title, subtitle, breadcrumbs, primaryAct
   const initials = session ? getInitials(session.name) : "";
 
   return (
-    <div className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/75 backdrop-blur-xl">
+    <div className="glass-nav sticky top-0 z-30">
       <div className="flex h-14 items-center justify-between gap-3 px-4 sm:h-16 sm:px-6">
         <div className="flex min-w-0 items-center gap-3">
           {session ? (

@@ -15,7 +15,7 @@ export default async function SettingsPage() {
         title="Settings"
       />
 
-      <div className="flex-1 px-4 py-5 sm:px-6 sm:py-6">
+      <div className="flex-1 px-3.5 py-4 sm:px-6 sm:py-6">
         <div className="grid gap-4 lg:grid-cols-[220px_1fr] lg:gap-5">
           <nav className="flex gap-2 overflow-x-auto pb-1 text-sm scrollbar-none lg:flex-col lg:gap-1 lg:overflow-visible lg:pb-0">
             {["Profile", "Workspace", "Notifications", "Integrations", "Billing", "API access"].map((item, idx) => (

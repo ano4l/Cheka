@@ -26,12 +26,12 @@ function getInitials(name?: string) {
 
 export function SiteHeader({ signedIn, userName, userEmail }: SiteHeaderProps) {
   return (
-    <header className="sticky top-0 z-40 border-b border-white/40 bg-white/55 backdrop-blur-xl">
+    <header className="glass-nav sticky top-0 z-40">
       <div className="app-shell flex h-14 items-center justify-between gap-3 sm:h-16">
         <Link className="flex items-center gap-2.5" href="/">
           <CheckaLogo className="h-7 w-7" />
           <span className="text-base font-semibold tracking-tight text-ink">Cheka</span>
-          <span className="hidden rounded-full border border-white/70 bg-white/65 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted backdrop-blur sm:inline-block">
+          <span className="hidden rounded-full border border-white/70 bg-white/55 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted backdrop-blur sm:inline-block">
             Beta
           </span>
         </Link>
@@ -54,12 +54,12 @@ export function SiteHeader({ signedIn, userName, userEmail }: SiteHeaderProps) {
               <Link className="hidden text-sm text-muted transition hover:text-ink sm:inline-flex" href="/dashboard">
                 Dashboard
               </Link>
-              <Link className="btn-primary h-9 px-3 text-xs" href="/dashboard/new">
+              <Link className="btn-primary h-10 px-3 text-xs" href="/dashboard/new">
                 New review
               </Link>
               <Link
                 aria-label={`Open dashboard as ${userEmail ?? userName ?? "user"}`}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-xs font-semibold text-white transition hover:bg-slate-800"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-ink text-xs font-semibold text-white transition hover:bg-slate-800"
                 href="/dashboard"
                 title={userName ?? userEmail}
               >
@@ -71,7 +71,7 @@ export function SiteHeader({ signedIn, userName, userEmail }: SiteHeaderProps) {
               <Link className="hidden text-sm text-muted transition hover:text-ink sm:inline-flex" href="/sign-in">
                 Sign in
               </Link>
-              <Link className="btn-primary h-9 px-3 text-xs sm:px-4" href="/sign-in?next=/dashboard/new">
+              <Link className="btn-primary h-10 px-3 text-xs sm:px-4" href="/sign-in?next=/dashboard/new">
                 Review a contract
               </Link>
             </>

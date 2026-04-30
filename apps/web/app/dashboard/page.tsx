@@ -55,7 +55,7 @@ export default async function DashboardPage() {
         title={`Welcome back, ${firstName}`}
       />
 
-      <div className="flex-1 px-4 py-5 sm:px-6 sm:py-6">
+      <div className="flex-1 px-3.5 py-4 sm:px-6 sm:py-6">
         <section className="mb-5 grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_360px]">
           <div className="glass-strong p-5 sm:p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -71,7 +71,7 @@ export default async function DashboardPage() {
                   to sign, renegotiate, or escalate.
                 </p>
               </div>
-              <Link className="btn-primary h-10 px-4 text-sm" href="/dashboard/new">
+              <Link className="btn-primary h-11 w-full px-4 text-sm sm:h-10 sm:w-auto" href="/dashboard/new">
                 Start review
                 <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m0 0l-5-5m5 5l-5 5" />
@@ -112,7 +112,7 @@ export default async function DashboardPage() {
           </aside>
         </section>
 
-        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:gap-4 xl:grid-cols-4">
           <KpiCard delta={{ value: "+3 vs last week", trend: "up" }} label="Reviews this month" value={String(reviewedThisMonth)} />
           <KpiCard delta={{ value: "+6 pts", trend: "down" }} hint="risk is trending up" label="Average risk score" value={`${avgScore}/100`} />
           <KpiCard delta={{ value: `${highRisk} urgent`, trend: "down" }} label="Red flags surfaced" value={String(totalFlags)} />

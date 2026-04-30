@@ -59,7 +59,7 @@ body {
 
 @layer components {
   .app-shell {
-    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-7xl px-3.5 sm:px-6 lg:px-8;
   }
 
   /* ---- Surfaces ---- */
@@ -78,26 +78,26 @@ body {
   /* Glass card — subtle highlight + blur */
   .glass {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.76) 100%);
-    border: 1px solid rgba(226, 232, 240, 0.9);
-    backdrop-filter: blur(12px) saturate(130%);
-    -webkit-backdrop-filter: blur(12px) saturate(130%);
+      linear-gradient(145deg, rgba(255, 255, 255, 0.76) 0%, rgba(255, 255, 255, 0.46) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(22px) saturate(150%);
+    -webkit-backdrop-filter: blur(22px) saturate(150%);
     box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.7) inset,
-      0 10px 24px -18px rgba(15, 23, 42, 0.22);
-    @apply rounded-lg;
+      0 1px 0 rgba(255, 255, 255, 0.78) inset,
+      0 18px 44px -30px rgba(15, 23, 42, 0.34);
+    @apply rounded-2xl;
   }
 
   .glass-strong {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.78) 100%);
-    border: 1px solid rgba(226, 232, 240, 0.9);
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
+      linear-gradient(145deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.58) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(28px) saturate(165%);
+    -webkit-backdrop-filter: blur(28px) saturate(165%);
     box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.7) inset,
-      0 12px 36px -12px rgba(15, 23, 42, 0.12);
-    @apply rounded-lg;
+      0 1px 0 rgba(255, 255, 255, 0.82) inset,
+      0 24px 70px -42px rgba(15, 23, 42, 0.42);
+    @apply rounded-2xl;
   }
 
   .glass-dark {
@@ -109,7 +109,24 @@ body {
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.05) inset,
       0 12px 36px -12px rgba(0, 0, 0, 0.35);
-    @apply rounded-lg text-white;
+    @apply rounded-2xl text-white;
+  }
+
+  .glass-nav {
+    background: rgba(255, 255, 255, 0.62);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.62);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+  }
+
+  .glass-panel {
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.42));
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    box-shadow: 0 14px 40px -30px rgba(15, 23, 42, 0.34);
+    @apply rounded-xl;
   }
 
   /* Atmospheric backdrops */
@@ -118,6 +135,7 @@ body {
   }
   .bg-cream-aurora {
     background:
+      linear-gradient(115deg, rgba(255, 255, 255, 0.5) 0%, transparent 32%),
       linear-gradient(180deg, rgba(15, 118, 110, 0.08) 0%, rgba(15, 118, 110, 0) 22rem),
       linear-gradient(155deg, #f8fafc 0%, #f4f7f8 52%, #eef7f4 100%);
   }
@@ -140,9 +158,9 @@ body {
   }
 
   .input-glass {
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(16px) saturate(140%);
     color: var(--ink);
     @apply w-full rounded-xl px-3 py-2 text-sm outline-none transition;
   }
@@ -183,10 +201,10 @@ body {
   .btn-secondary:hover { background: var(--surface-muted); border-color: var(--border-strong); }
 
   .btn-glass {
-    background: rgba(255, 255, 255, 0.65);
-    border: 1px solid rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.58);
+    border: 1px solid rgba(255, 255, 255, 0.78);
     color: var(--ink);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px) saturate(145%);
     @apply btn;
   }
   .btn-glass:hover {
@@ -216,7 +234,7 @@ body {
   }
 
   .panel-header {
-    @apply flex items-center justify-between gap-3 border-b border-slate-200/70 px-4 py-3 sm:px-5;
+    @apply flex items-center justify-between gap-3 border-b border-white/60 px-4 py-3 sm:px-5;
   }
 
   .icon-tile {
@@ -236,6 +254,24 @@ body {
 
   /* Hide on mobile, show on desktop helpers */
   .touch-area { min-height: 44px; min-width: 44px; }
+
+  @media (max-width: 640px) {
+    .glass,
+    .glass-strong {
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      @apply rounded-xl;
+    }
+
+    .btn,
+    .btn-primary,
+    .btn-accent,
+    .btn-secondary,
+    .btn-glass,
+    .btn-ghost {
+      min-height: 44px;
+    }
+  }
 }
 
 @layer utilities {

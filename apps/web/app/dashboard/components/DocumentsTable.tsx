@@ -69,8 +69,8 @@ export function DocumentsTable({ documents }: DocumentsTableProps) {
             </button>
           ))}
         </div>
-        <div className="flex w-full items-center gap-2 sm:w-auto">
-          <label className="relative flex-1 sm:w-64 sm:flex-none">
+        <div className="grid w-full gap-2 sm:flex sm:w-auto sm:items-center">
+          <label className="relative min-w-0 flex-1 sm:w-64 sm:flex-none">
             <span className="sr-only">Search documents</span>
             <svg
               viewBox="0 0 24 24"
@@ -82,7 +82,7 @@ export function DocumentsTable({ documents }: DocumentsTableProps) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.3-4.3M11 19a8 8 0 100-16 8 8 0 000 16z" />
             </svg>
             <input
-              className="input-glass h-9 pl-9 text-xs"
+              className="input-glass h-11 pl-9 text-xs sm:h-9"
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search documents"
               value={query}
@@ -92,7 +92,7 @@ export function DocumentsTable({ documents }: DocumentsTableProps) {
             Sort documents
           </label>
           <select
-            className="input-glass h-9 w-36 text-xs"
+            className="input-glass h-11 w-full text-xs sm:h-9 sm:w-36"
             id="document-sort"
             onChange={(event) => setSort(event.target.value as Sort)}
             value={sort}

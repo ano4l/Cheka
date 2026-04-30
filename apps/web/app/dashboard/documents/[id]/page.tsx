@@ -56,7 +56,7 @@ export default async function DocumentDetailPage({ params }: { params: Promise<{
         title={doc.name}
       />
 
-      <div className="flex-1 px-4 py-5 sm:px-6 sm:py-6">
+      <div className="flex-1 px-3.5 py-4 sm:px-6 sm:py-6">
         <div className="grid gap-4 xl:grid-cols-[1fr_320px] xl:gap-5">
           <div className="space-y-4 lg:space-y-5">
             <div className="glass-strong p-5 sm:p-6">

@@ -22,7 +22,7 @@ export default async function NewReviewPage() {
         title="Start a new contract review"
       />
 
-      <div className="flex-1 px-4 py-5 sm:px-6 sm:py-6">
+      <div className="flex-1 px-3.5 py-4 sm:px-6 sm:py-6">
         <div className="grid gap-4 xl:grid-cols-[1fr_300px] xl:gap-5">
           <div className="min-w-0">
             <PreviewStudio />

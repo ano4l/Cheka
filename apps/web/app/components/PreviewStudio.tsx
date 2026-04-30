@@ -335,8 +335,8 @@ export function PreviewStudio() {
       </div>
 
       {/* Stage indicator (Crextio pill nav) */}
-      <div className="border-b border-white/40 px-4 py-3 sm:px-5">
-        <ol className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+      <div className="scrollbar-none overflow-x-auto border-b border-white/40 px-3.5 py-3 sm:px-5">
+        <ol className="flex min-w-max items-center gap-1.5 sm:gap-2">
           {stageOrder.map((s, index) => {
             const currentIndex = stageOrder.indexOf(stage);
             const isActive = s === stage;
@@ -344,7 +344,7 @@ export function PreviewStudio() {
             return (
               <li key={s} className="flex items-center gap-1.5 sm:gap-2">
                 <div
-                  className={`flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition ${
+                  className={`flex h-9 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition ${
                     isActive
                       ? "bg-ink text-white shadow-soft"
                       : isComplete
@@ -375,7 +375,7 @@ export function PreviewStudio() {
       </div>
 
       <div className="grid gap-0 lg:grid-cols-[1fr_1.05fr]">
-        <section className="border-b border-white/40 p-4 sm:p-5 lg:border-b-0 lg:border-r" id="preview-form">
+        <section className="border-b border-white/40 p-3.5 sm:p-5 lg:border-b-0 lg:border-r" id="preview-form">
           <div className="mb-4 rounded-xl border border-slate-200/80 bg-white/70 p-3 shadow-soft">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
@@ -519,7 +519,7 @@ export function PreviewStudio() {
           </div>
         </section>
 
-        <section className="bg-white/30 p-4 sm:p-5">
+        <section className="bg-white/30 p-3.5 sm:p-5">
           <JobStatusCard
             externalApi={externalApi}
             isPending={isPending}
