@@ -376,13 +376,23 @@ export function PreviewStudio() {
 
       <div className="grid gap-0 lg:grid-cols-[1fr_1.05fr]">
         <section className="border-b border-white/40 p-4 sm:p-5 lg:border-b-0 lg:border-r" id="preview-form">
-          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-            <p className="text-sm font-semibold text-ink">Upload contract</p>
-            <div className="flex flex-wrap gap-1.5">
+          <div className="mb-4 rounded-xl border border-slate-200/80 bg-white/70 p-3 shadow-soft">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold text-ink">Upload contract</p>
+                <p className="mt-1 text-xs leading-5 text-muted">
+                  Start with a file, a sample contract, or pasted text. Cheka will extract the clauses and prepare a review.
+                </p>
+              </div>
+              <span className="rounded-full border border-accent/20 bg-accent-soft/70 px-2.5 py-1 text-[11px] font-semibold text-accent-strong">
+                Private preview
+              </span>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-1.5">
               {sampleContracts.map((sample) => (
                 <button
                   key={sample.id}
-                  className="rounded-full border border-white/70 bg-white/65 px-2.5 py-1 text-[11px] text-muted backdrop-blur transition hover:bg-white/85 hover:text-ink no-tap-highlight"
+                  className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-muted shadow-soft transition hover:border-accent/40 hover:text-ink no-tap-highlight"
                   onClick={() => applySample(sample.id)}
                   type="button"
                 >
@@ -400,20 +410,20 @@ export function PreviewStudio() {
               selectedFile={selectedFile}
             />
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="space-y-1">
+            <div className="grid gap-3 rounded-xl border border-slate-200/80 bg-white/65 p-3 sm:grid-cols-2">
+              <label className="space-y-1.5">
                 <span className="label">Contract name</span>
                 <input
-                  className="input-glass"
+                  className="input-glass bg-white/90"
                   onChange={(event) => setSourceName(event.target.value)}
                   placeholder="employment-offer.pdf"
                   value={sourceName}
                 />
               </label>
-              <label className="space-y-1">
+              <label className="space-y-1.5">
                 <span className="label">Email (optional)</span>
                 <input
-                  className="input-glass"
+                  className="input-glass bg-white/90"
                   onChange={(event) => setCustomerEmail(event.target.value)}
                   placeholder="name@example.com"
                   value={customerEmail}
@@ -421,11 +431,11 @@ export function PreviewStudio() {
               </label>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="space-y-1">
+            <div className="grid gap-3 rounded-xl border border-slate-200/80 bg-white/65 p-3 sm:grid-cols-2">
+              <label className="space-y-1.5">
                 <span className="label">Type</span>
                 <select
-                  className="input-glass"
+                  className="input-glass bg-white/90"
                   onChange={(event) => setInputType(event.target.value as InputType)}
                   value={inputType}
                 >
@@ -436,10 +446,10 @@ export function PreviewStudio() {
                   ))}
                 </select>
               </label>
-              <label className="space-y-1">
+              <label className="space-y-1.5">
                 <span className="label">Market</span>
                 <select
-                  className="input-glass"
+                  className="input-glass bg-white/90"
                   onChange={(event) => setMarket(event.target.value as Market)}
                   value={market}
                 >
@@ -453,10 +463,10 @@ export function PreviewStudio() {
             </div>
 
             {inputType === "url" ? (
-              <label className="space-y-1">
+              <label className="space-y-1.5 rounded-xl border border-slate-200/80 bg-white/65 p-3">
                 <span className="label">Public URL</span>
                 <input
-                  className="input-glass"
+                  className="input-glass bg-white/90"
                   onChange={(event) => setPublicUrl(event.target.value)}
                   placeholder="https://example.com/contract"
                   value={publicUrl}
@@ -464,18 +474,18 @@ export function PreviewStudio() {
               </label>
             ) : null}
 
-            <label className="space-y-1">
-              <span className="label">Or paste text</span>
+            <label className="block rounded-xl border border-slate-200/80 bg-white/65 p-3">
+              <span className="label">Or paste contract text</span>
               <textarea
-                className="input-glass min-h-[140px] resize-y font-mono text-xs leading-5"
+                className="input-glass mt-1.5 min-h-[150px] resize-y bg-white/90 font-mono text-xs leading-5"
                 onChange={(event) => setText(event.target.value)}
                 placeholder="Paste contract text here, or drop a file above."
                 value={text}
               />
-              <p className="text-[11px] text-muted">{text.length.toLocaleString()} chars · ≥ 40 needed</p>
+              <p className="mt-1.5 text-[11px] text-muted">{text.length.toLocaleString()} chars / 40 needed</p>
             </label>
 
-            <label className="flex items-start gap-2.5 rounded-2xl border border-white/70 bg-white/55 p-3 backdrop-blur">
+            <label className="flex items-start gap-2.5 rounded-xl border border-slate-200/80 bg-white/75 p-3 backdrop-blur">
               <input
                 checked={disclaimerAccepted}
                 className="mt-0.5 h-4 w-4 accent-accent"
