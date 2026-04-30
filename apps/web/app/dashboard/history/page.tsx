@@ -16,20 +16,20 @@ export default async function HistoryPage() {
         title="Activity"
       />
 
-      <div className="flex-1 px-6 py-6">
-        <div className="surface overflow-hidden">
-          <ul className="divide-y divide-line">
+      <div className="flex-1 px-4 py-5 sm:px-6 sm:py-6">
+        <div className="glass overflow-hidden">
+          <ul className="divide-y divide-white/40">
             {demoActivity.map((event) => (
-              <li className="flex items-start gap-3 px-4 py-3" key={event.id}>
+              <li className="flex items-start gap-3 px-4 py-3 sm:px-5" key={event.id}>
                 <span
-                  className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md border ${
+                  className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border ${
                     event.kind === "high_risk"
-                      ? "border-rose-200 bg-rose-50 text-rose-700"
+                      ? "border-rose-200/70 bg-rose-50/80 text-rose-700"
                       : event.kind === "review_completed"
-                        ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                        ? "border-emerald-200/70 bg-emerald-50/80 text-emerald-700"
                         : event.kind === "credit_added"
-                          ? "border-accent/30 bg-accent-soft text-accent-strong"
-                          : "border-line bg-canvas text-muted"
+                          ? "border-butter/40 bg-butter-soft/70 text-butter-deep"
+                          : "border-white/70 bg-white/60 text-muted"
                   }`}
                 >
                   <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">

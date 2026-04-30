@@ -34,32 +34,32 @@ export default async function HelpPage() {
         title="Help & support"
       />
 
-      <div className="flex-1 px-6 py-6">
-        <div className="grid gap-5 lg:grid-cols-[1fr_280px]">
-          <div className="surface overflow-hidden">
-            <div className="border-b border-line px-4 py-3">
+      <div className="flex-1 px-4 py-5 sm:px-6 sm:py-6">
+        <div className="grid gap-4 lg:grid-cols-[1fr_300px] lg:gap-5">
+          <div className="glass overflow-hidden">
+            <div className="border-b border-white/40 px-4 py-3 sm:px-5">
               <h2 className="text-sm font-semibold text-ink">Frequently asked</h2>
             </div>
-            <ul className="divide-y divide-line">
+            <ul className="divide-y divide-white/40">
               {faqs.map((item) => (
-                <li className="px-4 py-4" key={item.q}>
+                <li className="px-4 py-4 sm:px-5" key={item.q}>
                   <p className="text-sm font-semibold text-ink">{item.q}</p>
-                  <p className="mt-1.5 text-xs leading-5 text-muted">{item.a}</p>
+                  <p className="mt-1.5 text-xs leading-5 text-muted sm:text-sm sm:leading-6">{item.a}</p>
                 </li>
               ))}
             </ul>
           </div>
 
           <aside className="space-y-4">
-            <div className="surface p-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">Contact</h3>
+            <div className="glass p-4 sm:p-5">
+              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-muted">Contact</h3>
               <p className="mt-2 text-sm text-ink">Reach out anytime — we usually reply within 24 hours.</p>
-              <a className="btn-secondary mt-3 w-full px-3 py-2 text-xs" href="mailto:hello@cheka.app">
+              <a className="btn-glass mt-3 w-full px-3 py-2 text-xs" href="mailto:hello@cheka.app">
                 Email hello@cheka.app
               </a>
             </div>
-            <div className="surface p-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">Status</h3>
+            <div className="glass p-4 sm:p-5">
+              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-muted">Status</h3>
               <p className="mt-2 flex items-center gap-2 text-sm text-ink">
                 <span className="h-2 w-2 rounded-full bg-emerald-500" />
                 All systems operational

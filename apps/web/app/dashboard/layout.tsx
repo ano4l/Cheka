@@ -11,7 +11,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const initials = getInitials(session.name);
 
   return (
-    <div className="min-h-screen bg-canvas">
+    <div className="min-h-screen bg-cream-aurora">
       <div className="flex">
         <DashboardSidebar
           email={session.email}

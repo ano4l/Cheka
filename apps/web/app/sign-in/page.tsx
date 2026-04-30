@@ -52,13 +52,15 @@ export default async function SignInPage({
       : null;
 
   return (
-    <main className="min-h-[calc(100vh-3.5rem)] bg-canvas">
-      <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:py-16">
+    <main className="relative min-h-[calc(100vh-3.5rem)] overflow-hidden bg-cream-aurora">
+      <div className="pointer-events-none absolute -left-32 top-10 h-96 w-96 rounded-full bg-butter/30 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-accent/15 blur-3xl" />
+      <div className="relative mx-auto grid w-full max-w-6xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:py-16">
         <section className="flex flex-col justify-center">
           <div className="flex items-center gap-2">
             <CheckaLogo className="h-8 w-8" />
             <span className="text-lg font-semibold tracking-tight text-ink">Cheka</span>
-            <span className="rounded-md border border-line bg-white px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted">
+            <span className="rounded-full border border-white/70 bg-white/65 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted backdrop-blur">
               Demo
             </span>
           </div>
@@ -90,10 +92,10 @@ export default async function SignInPage({
           </ul>
         </section>
 
-        <section className="surface p-6 shadow-soft sm:p-8">
+        <section className="glass-strong p-6 sm:p-8">
           <div className="mb-5 flex items-center justify-between">
             <h2 className="text-lg font-semibold text-ink">Continue to dashboard</h2>
-            <span className="badge border-accent/30 bg-accent-soft text-accent-strong">
+            <span className="badge border-accent/30 bg-accent-soft/70 text-accent-strong">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
               Demo mode
             </span>
@@ -107,7 +109,7 @@ export default async function SignInPage({
               </label>
               <input
                 autoComplete="email"
-                className="input"
+                className="input-glass"
                 id="email"
                 name="email"
                 placeholder="you@company.com"
@@ -121,7 +123,7 @@ export default async function SignInPage({
               </label>
               <input
                 autoComplete="name"
-                className="input"
+                className="input-glass"
                 id="name"
                 name="name"
                 placeholder="Optional"
@@ -129,7 +131,7 @@ export default async function SignInPage({
               />
             </div>
             {errorMessage ? (
-              <p className="rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
+              <p className="rounded-2xl border border-rose-200/70 bg-rose-50/85 px-3 py-2 text-xs text-rose-700 backdrop-blur">
                 {errorMessage}
               </p>
             ) : null}
@@ -145,9 +147,9 @@ export default async function SignInPage({
           </form>
 
           <div className="my-6 flex items-center gap-3 text-[11px] uppercase tracking-wider text-muted">
-            <span className="h-px flex-1 bg-line" />
+            <span className="h-px flex-1 bg-white/60" />
             or pick a demo account
-            <span className="h-px flex-1 bg-line" />
+            <span className="h-px flex-1 bg-white/60" />
           </div>
 
           <div className="space-y-2">
@@ -157,10 +159,10 @@ export default async function SignInPage({
                 <input type="hidden" name="name" value={account.name} />
                 <input type="hidden" name="workspace" value={account.workspace} />
                 <button
-                  className="flex w-full items-center gap-3 rounded-lg border border-line bg-white px-3 py-2.5 text-left transition hover:border-slate-300 hover:bg-canvas"
+                  className="flex w-full items-center gap-3 rounded-2xl border border-white/70 bg-white/55 px-3 py-2.5 text-left backdrop-blur transition hover:bg-white/85 no-tap-highlight"
                   type="submit"
                 >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-soft text-xs font-semibold text-accent-strong">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink text-xs font-semibold text-white">
                     {account.initials}
                   </span>
                   <span className="min-w-0 flex-1">

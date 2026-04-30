@@ -11,7 +11,7 @@ const quickActions = [
     href: "/dashboard/new",
     title: "Upload a contract",
     body: "Drop a PDF, DOCX, or image to start a new review.",
-    accent: "bg-accent text-white",
+    accent: "bg-ink text-white",
     icon: (
       <path
         strokeLinecap="round"
@@ -24,7 +24,7 @@ const quickActions = [
     href: "/dashboard/new?source=text",
     title: "Paste contract text",
     body: "Already have the wording? Skip the upload and analyse text.",
-    accent: "bg-white text-ink border border-line",
+    accent: "bg-butter text-ink",
     icon: (
       <path
         strokeLinecap="round"
@@ -37,7 +37,7 @@ const quickActions = [
     href: "/dashboard/new?source=url",
     title: "Review by URL",
     body: "Send a public link to a contract — we'll fetch & extract.",
-    accent: "bg-white text-ink border border-line",
+    accent: "bg-accent text-white",
     icon: (
       <path
         strokeLinecap="round"
@@ -83,9 +83,37 @@ export default async function DashboardPage() {
         title={`Welcome back, ${firstName}`}
       />
 
-      <div className="flex-1 px-6 py-6">
+      <div className="flex-1 px-4 py-5 sm:px-6 sm:py-6">
+        {/* Hero glass strip */}
+        <section className="glass-strong relative mb-5 overflow-hidden p-5 sm:mb-6 sm:p-7">
+          <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-butter/35 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-16 right-32 h-40 w-40 rounded-full bg-accent/20 blur-3xl" />
+          <div className="relative flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-xl">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">
+                {session?.workspace ?? "Workspace"}
+              </p>
+              <h1 className="mt-1 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+                Hello {firstName} — let&apos;s read your next contract.
+              </h1>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                Upload a document, paste the text, or paste a link. We&apos;ll surface red flags,
+                missing clauses, and a clean explanation in under 30 seconds.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <Link className="btn-primary px-4 py-2 text-sm" href="/dashboard/new">
+                Start a review
+              </Link>
+              <Link className="btn-glass px-4 py-2 text-sm" href="/dashboard/documents">
+                Browse documents
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* KPI strip */}
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4">
           <KpiCard
             delta={{ value: "+3 vs last week", trend: "up" }}
             label="Reviews this month"
@@ -131,20 +159,20 @@ export default async function DashboardPage() {
 
         {/* Quick actions */}
         <section className="mt-6">
-          <div className="mb-2.5 flex items-center justify-between">
+          <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-ink">Quick actions</h2>
             <Link className="text-xs text-muted transition hover:text-ink" href="/dashboard/new">
               See all →
             </Link>
           </div>
-          <div className="grid gap-3 md:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {quickActions.map((action) => (
               <Link
-                className="group surface flex items-start gap-3 p-4 transition hover:border-slate-300 hover:shadow-soft"
+                className="group glass flex items-start gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-elevated sm:p-5 no-tap-highlight"
                 href={action.href}
                 key={action.href}
               >
-                <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${action.accent}`}>
+                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${action.accent} shadow-soft`}>
                   <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
                     {action.icon}
                   </svg>
@@ -162,9 +190,9 @@ export default async function DashboardPage() {
         </section>
 
         {/* Two-column: recent docs + activity */}
-        <section className="mt-6 grid gap-5 lg:grid-cols-[1.7fr_1fr]">
-          <div className="surface overflow-hidden">
-            <div className="flex items-center justify-between border-b border-line px-4 py-3">
+        <section className="mt-6 grid gap-4 lg:grid-cols-[1.7fr_1fr] lg:gap-5">
+          <div className="glass overflow-hidden">
+            <div className="flex items-center justify-between border-b border-white/40 px-4 py-3">
               <div>
                 <h2 className="text-sm font-semibold text-ink">Recent documents</h2>
                 <p className="text-xs text-muted">Past 7 days · {demoDocuments.length} reviews</p>
@@ -173,7 +201,7 @@ export default async function DashboardPage() {
                 View all
               </Link>
             </div>
-            <ul className="divide-y divide-line">
+            <ul className="divide-y divide-white/40">
               {demoDocuments.slice(0, 5).map((doc) => (
                 <li key={doc.id}>
                   <DocumentRow doc={doc} />
@@ -182,13 +210,13 @@ export default async function DashboardPage() {
             </ul>
           </div>
 
-          <div className="space-y-5">
-            <div className="surface overflow-hidden">
-              <div className="border-b border-line px-4 py-3">
+          <div className="space-y-4 lg:space-y-5">
+            <div className="glass overflow-hidden">
+              <div className="border-b border-white/40 px-4 py-3">
                 <h2 className="text-sm font-semibold text-ink">Risk distribution</h2>
                 <p className="text-xs text-muted">Across the past 30 days</p>
               </div>
-              <div className="space-y-2.5 px-4 py-3">
+              <div className="space-y-3 px-4 py-4">
                 {riskDistribution.map((bucket) => {
                   const pct = Math.round((bucket.count / bucket.total) * 100);
                   return (
@@ -200,8 +228,7 @@ export default async function DashboardPage() {
                         </span>
                       </div>
                       <div
-                        className="h-1.5 w-full overflow-hidden rounded-full"
-                        style={{ background: bucket.soft }}
+                        className="h-2 w-full overflow-hidden rounded-full bg-white/55"
                       >
                         <div
                           className="h-full rounded-full transition-all"
@@ -214,25 +241,25 @@ export default async function DashboardPage() {
               </div>
             </div>
 
-            <div className="surface overflow-hidden">
-              <div className="flex items-center justify-between border-b border-line px-4 py-3">
+            <div className="glass overflow-hidden">
+              <div className="flex items-center justify-between border-b border-white/40 px-4 py-3">
                 <h2 className="text-sm font-semibold text-ink">Latest activity</h2>
                 <Link className="text-xs text-muted transition hover:text-ink" href="/dashboard/history">
                   Open
                 </Link>
               </div>
-              <ul className="divide-y divide-line">
+              <ul className="divide-y divide-white/40">
                 {demoActivity.slice(0, 4).map((event) => (
                   <li className="flex items-start gap-3 px-4 py-3" key={event.id}>
                     <span
-                      className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md border ${
+                      className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border ${
                         event.kind === "high_risk"
-                          ? "border-rose-200 bg-rose-50 text-rose-700"
+                          ? "border-rose-200/70 bg-rose-50/80 text-rose-700"
                           : event.kind === "review_completed"
-                            ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                            ? "border-emerald-200/70 bg-emerald-50/80 text-emerald-700"
                             : event.kind === "credit_added"
-                              ? "border-accent/30 bg-accent-soft text-accent-strong"
-                              : "border-line bg-canvas text-muted"
+                              ? "border-butter/40 bg-butter-soft/70 text-butter-deep"
+                              : "border-white/70 bg-white/60 text-muted"
                       }`}
                     >
                       <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">
@@ -261,17 +288,17 @@ export default async function DashboardPage() {
 
         {/* Tips */}
         <section className="mt-6">
-          <div className="mb-2.5 flex items-center justify-between">
+          <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-ink">Tips for higher-quality reviews</h2>
-            <span className="text-xs text-muted">3 of 12 · refreshes weekly</span>
+            <span className="hidden text-xs text-muted sm:inline">3 of 12 · refreshes weekly</span>
           </div>
-          <div className="grid gap-3 md:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {tips.map((tip, idx) => (
-              <div className="surface p-4" key={tip.title}>
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-line bg-canvas text-[11px] font-semibold text-muted">
+              <div className="glass p-4 sm:p-5" key={tip.title}>
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/70 bg-white/65 text-[11px] font-semibold text-ink backdrop-blur">
                   {idx + 1}
                 </span>
-                <h3 className="mt-2.5 text-sm font-semibold text-ink">{tip.title}</h3>
+                <h3 className="mt-3 text-sm font-semibold text-ink">{tip.title}</h3>
                 <p className="mt-1 text-xs leading-5 text-muted">{tip.body}</p>
               </div>
             ))}

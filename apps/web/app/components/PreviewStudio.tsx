@@ -30,9 +30,9 @@ const inputLabels: Record<InputType, string> = {
 };
 
 const riskBadgeStyles: Record<RiskClassification, string> = {
-  low: "border-emerald-200 bg-emerald-50 text-emerald-800",
-  medium: "border-amber-200 bg-amber-50 text-amber-800",
-  high: "border-rose-200 bg-rose-50 text-rose-800",
+  low: "border-emerald-200/70 bg-emerald-50/80 text-emerald-800",
+  medium: "border-amber-200/70 bg-amber-50/80 text-amber-800",
+  high: "border-rose-200/70 bg-rose-50/80 text-rose-800",
 };
 
 const stageOrder = ["intake", "checkout", "analysis", "ask"] as const;
@@ -310,21 +310,21 @@ export function PreviewStudio() {
   }
 
   return (
-    <div className="surface overflow-hidden shadow-soft">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-canvas px-5 py-3">
+    <div className="glass-strong overflow-hidden">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/40 bg-white/35 px-4 py-3 sm:px-5">
         <div className="flex items-center gap-3">
-          <div className="flex h-7 items-center gap-2 rounded-md border border-line bg-white px-2.5 text-xs font-medium text-muted">
+          <div className="flex h-7 items-center gap-2 rounded-full border border-white/70 bg-white/65 px-2.5 text-[11px] font-medium text-muted backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
             New review
           </div>
-          <p className="text-sm font-medium text-ink">Contract review workspace</p>
+          <p className="hidden text-sm font-medium text-ink sm:block">Contract review workspace</p>
         </div>
         <div className="flex items-center gap-2">
           <span
             className={`badge ${
               engineHealthy
-                ? "border-accent/30 bg-accent-soft text-accent-strong"
-                : "border-amber-200 bg-amber-50 text-amber-800"
+                ? "border-accent/30 bg-accent-soft/80 text-accent-strong"
+                : "border-amber-200/70 bg-amber-50/80 text-amber-800"
             }`}
           >
             <span
@@ -343,30 +343,31 @@ export function PreviewStudio() {
         </div>
       </div>
 
-      <div className="border-b border-line bg-white px-5 py-3">
-        <ol className="flex flex-wrap items-center gap-2">
+      {/* Stage indicator (Crextio pill nav) */}
+      <div className="border-b border-white/40 px-4 py-3 sm:px-5">
+        <ol className="flex flex-wrap items-center gap-1.5 sm:gap-2">
           {stageOrder.map((s, index) => {
             const currentIndex = stageOrder.indexOf(stage);
             const isActive = s === stage;
             const isComplete = currentIndex > index;
             return (
-              <li key={s} className="flex items-center gap-2">
+              <li key={s} className="flex items-center gap-1.5 sm:gap-2">
                 <div
-                  className={`flex h-6 items-center gap-1.5 rounded-full px-2.5 text-xs font-medium transition ${
+                  className={`flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition ${
                     isActive
-                      ? "bg-ink text-white"
+                      ? "bg-ink text-white shadow-soft"
                       : isComplete
-                        ? "bg-accent-soft text-accent-strong"
-                        : "border border-line bg-white text-muted"
+                        ? "bg-butter-soft text-butter-deep"
+                        : "border border-white/70 bg-white/60 text-muted backdrop-blur"
                   }`}
                 >
                   <span
-                    className={`flex h-4 w-4 items-center justify-center rounded-full text-[10px] ${
+                    className={`flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold ${
                       isActive
-                        ? "bg-white/15 text-white"
+                        ? "bg-white/20 text-white"
                         : isComplete
-                          ? "bg-accent text-white"
-                          : "border border-line bg-canvas text-muted"
+                          ? "bg-butter text-ink"
+                          : "border border-white/70 bg-white/65 text-muted"
                     }`}
                   >
                     {isComplete ? "✓" : index + 1}
@@ -374,7 +375,7 @@ export function PreviewStudio() {
                   {stageLabels[s]}
                 </div>
                 {index < stageOrder.length - 1 ? (
-                  <span className="hidden h-px w-6 bg-line sm:inline-block" />
+                  <span className="hidden h-px w-6 bg-white/60 sm:inline-block" />
                 ) : null}
               </li>
             );
@@ -383,14 +384,14 @@ export function PreviewStudio() {
       </div>
 
       <div className="grid gap-0 lg:grid-cols-[1fr_1.05fr]">
-        <section className="border-b border-line p-5 lg:border-b-0 lg:border-r" id="preview-form">
-          <div className="mb-3 flex items-center justify-between gap-2">
-            <p className="text-sm font-medium text-ink">Upload contract</p>
-            <div className="flex flex-wrap gap-1">
+        <section className="border-b border-white/40 p-4 sm:p-5 lg:border-b-0 lg:border-r" id="preview-form">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <p className="text-sm font-semibold text-ink">Upload contract</p>
+            <div className="flex flex-wrap gap-1.5">
               {sampleContracts.map((sample) => (
                 <button
                   key={sample.id}
-                  className="rounded-md border border-line bg-white px-2 py-1 text-xs text-muted transition hover:border-slate-300 hover:text-ink"
+                  className="rounded-full border border-white/70 bg-white/65 px-2.5 py-1 text-[11px] text-muted backdrop-blur transition hover:bg-white/85 hover:text-ink no-tap-highlight"
                   onClick={() => applySample(sample.id)}
                   type="button"
                 >
@@ -412,7 +413,7 @@ export function PreviewStudio() {
               <label className="space-y-1">
                 <span className="label">Contract name</span>
                 <input
-                  className="input"
+                  className="input-glass"
                   onChange={(event) => setSourceName(event.target.value)}
                   placeholder="employment-offer.pdf"
                   value={sourceName}
@@ -421,7 +422,7 @@ export function PreviewStudio() {
               <label className="space-y-1">
                 <span className="label">Email (optional)</span>
                 <input
-                  className="input"
+                  className="input-glass"
                   onChange={(event) => setCustomerEmail(event.target.value)}
                   placeholder="name@example.com"
                   value={customerEmail}
@@ -433,7 +434,7 @@ export function PreviewStudio() {
               <label className="space-y-1">
                 <span className="label">Type</span>
                 <select
-                  className="input"
+                  className="input-glass"
                   onChange={(event) => setInputType(event.target.value as InputType)}
                   value={inputType}
                 >
@@ -447,7 +448,7 @@ export function PreviewStudio() {
               <label className="space-y-1">
                 <span className="label">Market</span>
                 <select
-                  className="input"
+                  className="input-glass"
                   onChange={(event) => setMarket(event.target.value as Market)}
                   value={market}
                 >
@@ -464,7 +465,7 @@ export function PreviewStudio() {
               <label className="space-y-1">
                 <span className="label">Public URL</span>
                 <input
-                  className="input"
+                  className="input-glass"
                   onChange={(event) => setPublicUrl(event.target.value)}
                   placeholder="https://example.com/contract"
                   value={publicUrl}
@@ -475,7 +476,7 @@ export function PreviewStudio() {
             <label className="space-y-1">
               <span className="label">Or paste text</span>
               <textarea
-                className="input min-h-[140px] resize-y font-mono text-xs leading-5"
+                className="input-glass min-h-[140px] resize-y font-mono text-xs leading-5"
                 onChange={(event) => setText(event.target.value)}
                 placeholder="Paste contract text here, or drop a file above."
                 value={text}
@@ -483,7 +484,7 @@ export function PreviewStudio() {
               <p className="text-[11px] text-muted">{text.length.toLocaleString()} chars · ≥ 40 needed</p>
             </label>
 
-            <label className="flex items-start gap-2.5 rounded-lg border border-line bg-canvas p-3">
+            <label className="flex items-start gap-2.5 rounded-2xl border border-white/70 bg-white/55 p-3 backdrop-blur">
               <input
                 checked={disclaimerAccepted}
                 className="mt-0.5 h-4 w-4 accent-accent"
@@ -517,7 +518,7 @@ export function PreviewStudio() {
           </div>
         </section>
 
-        <section className="bg-canvas p-5">
+        <section className="bg-white/30 p-4 sm:p-5">
           <JobStatusCard
             externalApi={externalApi}
             isPending={isPending}
@@ -530,12 +531,12 @@ export function PreviewStudio() {
           />
 
           {feedback ? (
-            <div className="mt-3 animate-fade-up rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-900">
+            <div className="mt-3 animate-fade-up rounded-2xl border border-emerald-200/70 bg-emerald-50/85 px-3 py-2 text-xs text-emerald-900 backdrop-blur">
               {feedback}
             </div>
           ) : null}
           {error ? (
-            <div className="mt-3 animate-fade-up rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-900">
+            <div className="mt-3 animate-fade-up rounded-2xl border border-rose-200/70 bg-rose-50/85 px-3 py-2 text-xs text-rose-900 backdrop-blur">
               {error}
             </div>
           ) : null}
@@ -543,7 +544,7 @@ export function PreviewStudio() {
           {isPending && pendingLabel === "Running AI analysis" ? <AnalysisSkeleton /> : null}
 
           {job?.status === "failed" ? (
-            <div className="mt-3 rounded-lg border border-rose-200 bg-rose-50 p-3">
+            <div className="mt-3 rounded-2xl border border-rose-200/70 bg-rose-50/85 p-3 backdrop-blur">
               <p className="text-sm text-rose-950">
                 Analysis failed. Retry without creating a new checkout session.
               </p>
@@ -605,7 +606,7 @@ function JobStatusCard({
   onConfirmPayment,
 }: JobStatusCardProps) {
   return (
-    <div className="surface p-4 shadow-soft">
+    <div className="glass p-4 sm:p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-wider text-muted">Job status</p>
@@ -617,14 +618,14 @@ function JobStatusCard({
           <span
             className={`badge ${
               job.payment.payment_status === "paid"
-                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                : "border-amber-200 bg-amber-50 text-amber-800"
+                ? "border-emerald-200/70 bg-emerald-50/85 text-emerald-700"
+                : "border-amber-200/70 bg-amber-50/85 text-amber-800"
             }`}
           >
             {job.payment.payment_status === "paid" ? "Paid" : "Checkout pending"}
           </span>
         ) : (
-          <span className="badge border-line bg-canvas text-muted">Idle</span>
+          <span className="badge border-white/70 bg-white/60 text-muted">Idle</span>
         )}
       </div>
 
@@ -648,11 +649,11 @@ function JobStatusCard({
       </dl>
 
       {job && job.payment.payment_status === "unpaid" ? (
-        <div className="mt-3 space-y-2 border-t border-line pt-3">
+        <div className="mt-3 space-y-2 border-t border-white/40 pt-3">
           <p className="text-xs leading-5 text-muted">{job.payment.note}</p>
           {externalApi ? (
             <button
-              className="btn-secondary w-full"
+              className="btn-glass w-full"
               disabled={isPending}
               onClick={onPrepareCheckout}
               type="button"
@@ -662,7 +663,7 @@ function JobStatusCard({
           ) : null}
           {externalApi && job.payment.checkout_url ? (
             <a
-              className="btn-secondary w-full"
+              className="btn-glass w-full"
               href={job.payment.checkout_url}
               rel="noreferrer"
               target="_blank"
@@ -694,18 +695,18 @@ function JobStatusCard({
 
 function AnalysisSkeleton() {
   return (
-    <div className="mt-3 surface p-4">
+    <div className="mt-3 glass p-4">
       <div className="flex items-center gap-3">
-        <div className="h-9 w-9 animate-pulse rounded-full bg-line" />
+        <div className="h-10 w-10 animate-pulse rounded-full bg-white/60" />
         <div className="space-y-1.5">
-          <div className="h-3 w-32 animate-pulse rounded bg-line" />
-          <div className="h-3 w-20 animate-pulse rounded bg-line" />
+          <div className="h-3 w-32 animate-pulse rounded-full bg-white/60" />
+          <div className="h-3 w-20 animate-pulse rounded-full bg-white/60" />
         </div>
       </div>
       <div className="mt-3 space-y-1.5">
-        <div className="h-3 w-full animate-pulse rounded bg-line" />
-        <div className="h-3 w-[92%] animate-pulse rounded bg-line" />
-        <div className="h-3 w-[80%] animate-pulse rounded bg-line" />
+        <div className="h-3 w-full animate-pulse rounded-full bg-white/60" />
+        <div className="h-3 w-[92%] animate-pulse rounded-full bg-white/60" />
+        <div className="h-3 w-[80%] animate-pulse rounded-full bg-white/60" />
       </div>
       <p className="mt-3 text-[11px] text-muted">Reading the contract and scoring the risk…</p>
     </div>
@@ -736,14 +737,14 @@ function AnalysisCard({
   escalation,
 }: AnalysisCardProps) {
   return (
-    <div className="mt-3 space-y-4 surface p-4 animate-fade-up">
-      <div className="flex flex-wrap items-center gap-4">
+    <div className="mt-3 space-y-4 glass-strong p-4 animate-fade-up sm:p-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <RiskGauge score={analysis.risk_score} level={analysis.risk_level} />
-        <div className="flex-1 space-y-2 min-w-[200px]">
-          <p className="badge border-line bg-canvas text-muted">{analysis.contract_type}</p>
+        <div className="min-w-0 flex-1 space-y-2">
+          <p className="badge border-white/70 bg-white/65 text-muted backdrop-blur">{analysis.contract_type}</p>
           <p className="text-sm leading-6 text-ink">{analysis.summary}</p>
           {escalation ? (
-            <p className="badge border-rose-200 bg-rose-50 text-rose-800">
+            <p className="badge border-rose-200/70 bg-rose-50/85 text-rose-800">
               <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-pulse-dot" />
               Escalation recommended
             </p>
@@ -753,12 +754,12 @@ function AnalysisCard({
 
       {analysis.factors.length > 0 ? (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted">Risk factors</p>
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted">Risk factors</p>
           <div className="mt-2 grid gap-2 sm:grid-cols-2">
             {analysis.factors.map((factor) => (
               <div
                 key={factor.key}
-                className="rounded-lg border border-line bg-white p-2.5 text-xs hover:border-slate-300"
+                className="rounded-2xl border border-white/70 bg-white/55 p-3 text-xs backdrop-blur transition hover:bg-white/75"
               >
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-medium text-ink">{factor.label}</p>
@@ -772,7 +773,7 @@ function AnalysisCard({
                 </div>
                 <p className="mt-1 leading-5 text-muted">{factor.explanation}</p>
                 {factor.evidence ? (
-                  <p className="mt-1.5 rounded bg-canvas px-2 py-1 font-mono text-[10px] leading-4 text-slate-700">
+                  <p className="mt-1.5 rounded-xl border border-white/70 bg-white/45 px-2 py-1 font-mono text-[10px] leading-4 text-slate-700 backdrop-blur">
                     “{factor.evidence}”
                   </p>
                 ) : null}
@@ -787,7 +788,7 @@ function AnalysisCard({
         <DetailList title="Recommended actions" items={analysis.recommended_actions} />
       </div>
 
-      <div className="grid gap-3 md:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
         <DetailList
           title="Financial obligations"
           items={analysis.financial_obligations}
@@ -809,8 +810,8 @@ function AnalysisCard({
       </div>
 
       {analysis.red_flags.length > 0 ? (
-        <div className="rounded-lg border border-rose-200 bg-rose-50 p-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-rose-900">Red flags</p>
+        <div className="rounded-2xl border border-rose-200/70 bg-rose-50/85 p-3 backdrop-blur sm:p-4">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-rose-900">Red flags</p>
           <ul className="mt-1.5 space-y-1.5 text-xs leading-5 text-rose-950">
             {analysis.red_flags.map((flag) => (
               <li key={flag} className="flex gap-2">
@@ -822,34 +823,34 @@ function AnalysisCard({
         </div>
       ) : null}
 
-      <div className="rounded-lg border border-line bg-canvas p-3">
-        <div className="flex items-center justify-between gap-2">
+      <div className="rounded-2xl border border-white/70 bg-white/55 p-3 backdrop-blur sm:p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted">Follow-up chat</p>
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted">Follow-up chat</p>
             <p className="text-[11px] text-muted">
               {followUp.questions_remaining} of {followUp.free_limit} free questions remaining
             </p>
           </div>
-          <div className="flex h-1.5 w-20 overflow-hidden rounded-full bg-line">
+          <div className="flex h-1.5 w-24 overflow-hidden rounded-full bg-white/65">
             <div
-              className="h-full bg-accent transition-all"
+              className="h-full bg-butter transition-all"
               style={{ width: `${(followUp.questions_remaining / followUp.free_limit) * 100}%` }}
             />
           </div>
         </div>
 
         {conversation.length > 0 ? (
-          <div ref={conversationRef} className="scrollbar-thin mt-2 max-h-64 space-y-2 overflow-y-auto pr-1">
+          <div ref={conversationRef} className="scrollbar-thin mt-3 max-h-64 space-y-2 overflow-y-auto pr-1">
             {conversation.map((message, index) => (
               <div
                 key={`${message.timestamp}-${index}`}
                 className={`flex ${message.role === "assistant" ? "justify-start" : "justify-end"}`}
               >
                 <div
-                  className={`max-w-[88%] rounded-lg px-3 py-2 text-sm leading-5 ${
+                  className={`max-w-[88%] rounded-2xl px-3 py-2 text-sm leading-5 ${
                     message.role === "assistant"
-                      ? "border border-line bg-white text-ink"
-                      : "bg-ink text-white"
+                      ? "border border-white/70 bg-white/85 text-ink backdrop-blur"
+                      : "bg-ink text-white shadow-soft"
                   }`}
                 >
                   <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-wider opacity-60">
@@ -861,7 +862,7 @@ function AnalysisCard({
             ))}
           </div>
         ) : (
-          <div className="mt-2 grid gap-1.5 sm:grid-cols-2">
+          <div className="mt-3 grid gap-1.5 sm:grid-cols-2">
             {[
               "Is it safe to sign?",
               "What does cancellation cost?",
@@ -870,7 +871,7 @@ function AnalysisCard({
             ].map((sample) => (
               <button
                 key={sample}
-                className="rounded-md border border-line bg-white px-2.5 py-1.5 text-left text-xs text-muted transition hover:border-slate-300 hover:text-ink"
+                className="rounded-full border border-white/70 bg-white/60 px-3 py-1.5 text-left text-xs text-muted backdrop-blur transition hover:bg-white/85 hover:text-ink no-tap-highlight"
                 onClick={() => onChangeQuestion(sample)}
                 type="button"
               >
@@ -880,9 +881,9 @@ function AnalysisCard({
           </div>
         )}
 
-        <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+        <div className="mt-3 flex flex-col gap-2 sm:flex-row">
           <input
-            className="input flex-1"
+            className="input-glass flex-1"
             onChange={(event) => onChangeQuestion(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter" && followUpQuestion.trim()) onAsk();
@@ -915,7 +916,7 @@ interface DetailListProps {
 function DetailList({ title, items, fallback, compact }: DetailListProps) {
   const displayItems = items.length > 0 ? items : fallback ? [fallback] : [];
   return (
-    <div className="rounded-lg border border-line bg-white p-3">
+    <div className="rounded-2xl border border-white/70 bg-white/55 p-3 backdrop-blur">
       <p className="text-[10px] font-semibold uppercase tracking-wider text-muted">{title}</p>
       <ul
         className={`mt-1.5 space-y-1.5 ${compact ? "text-[11px] leading-4" : "text-xs leading-5"} text-slate-800`}
@@ -934,4 +935,3 @@ function DetailList({ title, items, fallback, compact }: DetailListProps) {
     </div>
   );
 }
-

@@ -34,34 +34,37 @@ const riskSignals = [
 
 export default function Home() {
   return (
-    <main>
-      <section className="border-b border-line bg-white">
-        <div className="app-shell py-12 sm:py-16">
+    <main className="bg-cream-aurora">
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-butter/30 blur-3xl" />
+        <div className="pointer-events-none absolute -right-24 top-32 h-96 w-96 rounded-full bg-accent/15 blur-3xl" />
+        <div className="app-shell relative py-14 sm:py-20">
           <div className="max-w-3xl">
-            <span className="badge border-accent/30 bg-accent-soft text-accent-strong">
+            <span className="badge border-white/70 bg-white/65 text-accent-strong backdrop-blur">
               <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-dot" />
               AI-powered contract review · South Africa & Kenya
             </span>
-            <h1 className="mt-5 text-balance text-4xl font-bold leading-tight text-ink sm:text-5xl">
+            <h1 className="mt-5 text-balance text-4xl font-bold leading-tight tracking-tight text-ink sm:text-5xl lg:text-6xl">
               Know what a contract really says before you sign it.
             </h1>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-muted sm:text-lg">
+            <p className="mt-5 max-w-2xl text-base leading-7 text-muted sm:text-lg">
               Upload a contract — PDF, Word, image, or pasted text. Cheka extracts the content, scores the risk,
               highlights the clauses that matter, and answers your questions in plain language.
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <Link className="btn-primary px-4 py-2.5 text-sm" href="/sign-in?next=/dashboard/new">
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <Link className="btn-primary px-5 py-2.5 text-sm" href="/sign-in?next=/dashboard/new">
                 Open the dashboard
                 <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m0 0l-5-5m5 5l-5 5" />
                 </svg>
               </Link>
-              <Link className="btn-secondary px-4 py-2.5 text-sm" href="#how-it-works">
+              <Link className="btn-glass px-5 py-2.5 text-sm" href="#how-it-works">
                 See how it works
               </Link>
             </div>
 
-            <ul className="mt-7 grid max-w-2xl grid-cols-2 gap-x-6 gap-y-2 text-sm text-muted sm:grid-cols-3">
+            <ul className="mt-8 grid max-w-2xl grid-cols-1 gap-x-6 gap-y-2 text-sm text-muted sm:grid-cols-2 lg:grid-cols-3">
               {[
                 "PDF, DOCX, image",
                 "Risk score 0–100",
@@ -90,11 +93,11 @@ export default function Home() {
       <section className="app-shell py-10 sm:py-14" id="dashboard-preview">
         <div className="grid gap-8 lg:grid-cols-[1fr_1.5fr] lg:items-center">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-accent">Dashboard preview</p>
-            <h2 className="mt-2 text-2xl font-semibold text-ink sm:text-3xl">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-accent">Dashboard preview</p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
               A workspace built around clarity, not paperwork.
             </h2>
-            <p className="mt-3 text-sm leading-6 text-muted">
+            <p className="mt-3 text-sm leading-6 text-muted sm:text-base">
               Sign in and you land in a workspace with quick actions, your past reviews, and a shortcut to
               upload a new contract. Every review is a clean record — risk score, evidence, and follow-up
               answers in one place.
@@ -103,32 +106,32 @@ export default function Home() {
               <Link className="btn-primary px-3.5 py-2 text-sm" href="/sign-in?next=/dashboard">
                 Open dashboard
               </Link>
-              <Link className="btn-secondary px-3.5 py-2 text-sm" href="/sign-in?next=/dashboard/new">
+              <Link className="btn-glass px-3.5 py-2 text-sm" href="/sign-in?next=/dashboard/new">
                 Try a sample contract
               </Link>
             </div>
             <p className="mt-3 text-xs text-muted">No password — demo workspace ready in 2 seconds.</p>
           </div>
 
-          <div className="surface overflow-hidden shadow-soft">
+          <div className="glass-strong overflow-hidden">
             {/* Mock dashboard preview */}
-            <div className="flex items-center gap-1.5 border-b border-line bg-canvas px-3 py-2">
+            <div className="flex items-center gap-1.5 border-b border-white/40 bg-white/40 px-3 py-2">
               <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
               <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
               <span className="ml-3 truncate text-[11px] text-muted">cheka.app/dashboard</span>
             </div>
             <div className="flex">
-              <div className="hidden w-40 shrink-0 border-r border-line bg-white p-3 sm:block">
+              <div className="hidden w-40 shrink-0 border-r border-white/40 p-3 sm:block">
                 <div className="flex items-center gap-2">
-                  <div className="h-5 w-5 rounded-md bg-accent" />
+                  <div className="h-5 w-5 rounded-full bg-ink" />
                   <span className="text-xs font-semibold text-ink">Cheka</span>
                 </div>
                 <div className="mt-3 space-y-1 text-[11px]">
-                  <div className="rounded-md bg-accent-soft px-2 py-1 font-medium text-accent-strong">Overview</div>
-                  <div className="px-2 py-1 text-muted">New review</div>
-                  <div className="px-2 py-1 text-muted">Documents</div>
-                  <div className="px-2 py-1 text-muted">Activity</div>
+                  <div className="rounded-full bg-ink px-2 py-1 font-medium text-white">Overview</div>
+                  <div className="rounded-full px-2 py-1 text-muted">New review</div>
+                  <div className="rounded-full px-2 py-1 text-muted">Documents</div>
+                  <div className="rounded-full px-2 py-1 text-muted">Activity</div>
                 </div>
               </div>
               <div className="flex-1 p-4">
@@ -139,22 +142,22 @@ export default function Home() {
                     { l: "Flags", v: "20" },
                     { l: "Credits", v: "3" },
                   ].map((kpi) => (
-                    <div className="rounded-lg border border-line bg-white p-2.5" key={kpi.l}>
-                      <p className="text-[9px] uppercase tracking-wider text-muted">{kpi.l}</p>
+                    <div className="rounded-xl border border-white/70 bg-white/55 p-2.5 backdrop-blur" key={kpi.l}>
+                      <p className="text-[9px] font-semibold uppercase tracking-wider text-muted">{kpi.l}</p>
                       <p className="mt-0.5 text-lg font-bold text-ink">{kpi.v}</p>
                     </div>
                   ))}
                 </div>
-                <div className="mt-3 rounded-lg border border-line bg-white">
-                  <div className="border-b border-line px-3 py-2 text-xs font-semibold text-ink">Recent documents</div>
-                  <ul className="divide-y divide-line text-[11px]">
+                <div className="mt-3 rounded-xl border border-white/70 bg-white/55 backdrop-blur">
+                  <div className="border-b border-white/60 px-3 py-2 text-xs font-semibold text-ink">Recent documents</div>
+                  <ul className="divide-y divide-white/60 text-[11px]">
                     {[
-                      { n: "Hodari Realty · 12-month lease.pdf", r: 72, c: "bg-rose-50 text-rose-800 border-rose-200" },
-                      { n: "BrightPath services agreement.docx", r: 41, c: "bg-amber-50 text-amber-800 border-amber-200" },
-                      { n: "Junior dev offer letter.pdf", r: 18, c: "bg-emerald-50 text-emerald-800 border-emerald-200" },
+                      { n: "Hodari Realty · 12-month lease.pdf", r: 72, c: "bg-rose-50/80 text-rose-800 border-rose-200/70" },
+                      { n: "BrightPath services agreement.docx", r: 41, c: "bg-amber-50/80 text-amber-800 border-amber-200/70" },
+                      { n: "Junior dev offer letter.pdf", r: 18, c: "bg-emerald-50/80 text-emerald-800 border-emerald-200/70" },
                     ].map((row) => (
                       <li className="flex items-center gap-2 px-3 py-2" key={row.n}>
-                        <span className="flex h-6 w-6 items-center justify-center rounded-md border border-line bg-canvas text-[10px]">
+                        <span className="flex h-6 w-6 items-center justify-center rounded-full border border-white/70 bg-white/65 text-[10px]">
                           📄
                         </span>
                         <span className="min-w-0 flex-1 truncate text-ink">{row.n}</span>
@@ -173,15 +176,15 @@ export default function Home() {
 
       <section className="app-shell py-12" id="how-it-works">
         <div className="max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-wider text-accent">How it works</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink sm:text-3xl">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-accent">How it works</p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
             Four steps from a messy contract to a clear decision.
           </h2>
         </div>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((step) => (
-            <div key={step.n} className="surface p-5 shadow-soft">
-              <div className="flex h-8 w-8 items-center justify-center rounded-md border border-line bg-canvas text-sm font-semibold text-muted">
+            <div key={step.n} className="glass p-5 sm:p-6">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full border border-white/70 bg-white/65 text-sm font-semibold text-ink backdrop-blur">
                 {step.n}
               </div>
               <h3 className="mt-4 text-base font-semibold text-ink">{step.title}</h3>
@@ -194,8 +197,8 @@ export default function Home() {
       <section className="app-shell py-12" id="risk-factors">
         <div className="grid gap-8 lg:grid-cols-[1fr_1.4fr]">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-accent">Risk factors</p>
-            <h2 className="mt-2 text-2xl font-semibold text-ink sm:text-3xl">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-accent">Risk factors</p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
               The patterns that quietly hurt people.
             </h2>
             <p className="mt-3 text-sm leading-6 text-muted">
@@ -204,26 +207,26 @@ export default function Home() {
               and contract-aware follow-ups.
             </p>
             <div className="mt-5 grid grid-cols-3 gap-2 text-sm">
-              <div className="surface p-3">
+              <div className="glass p-3">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-700">Low</p>
                 <p className="mt-1 font-semibold text-ink">0 – 24</p>
               </div>
-              <div className="surface p-3">
+              <div className="glass p-3">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-amber-700">Medium</p>
                 <p className="mt-1 font-semibold text-ink">25 – 59</p>
               </div>
-              <div className="surface p-3">
+              <div className="glass p-3">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-rose-700">High</p>
                 <p className="mt-1 font-semibold text-ink">60 – 100</p>
               </div>
             </div>
           </div>
 
-          <div className="surface p-2">
-            <ul className="divide-y divide-line">
+          <div className="glass overflow-hidden p-2">
+            <ul className="divide-y divide-white/40">
               {riskSignals.map((signal) => (
                 <li key={signal.title} className="flex items-start gap-3 px-3 py-3">
-                  <div className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-md border border-rose-200 bg-rose-50 text-[11px] font-semibold text-rose-700">
+                  <div className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full border border-rose-200/70 bg-rose-50/80 text-[11px] font-semibold text-rose-700">
                     +{signal.weight}
                   </div>
                   <div>
@@ -237,11 +240,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="app-shell py-12" id="pricing">
+      <section className="app-shell pb-16 pt-12" id="pricing">
         <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-accent">Pricing</p>
-            <h2 className="mt-2 text-2xl font-semibold text-ink sm:text-3xl">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-accent">Pricing</p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
               Pay only when you actually need clarity.
             </h2>
             <p className="mt-3 text-sm leading-6 text-muted">
@@ -250,7 +253,7 @@ export default function Home() {
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="surface p-5 shadow-soft">
+            <div className="glass-strong p-5 sm:p-6">
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">Per review</p>
               <p className="mt-2 text-2xl font-semibold text-ink">ZAR 35 · KES 180</p>
               <ul className="mt-4 space-y-2 text-sm text-muted">
@@ -277,7 +280,7 @@ export default function Home() {
                 Start a review
               </Link>
             </div>
-            <div className="surface p-5 shadow-soft">
+            <div className="glass p-5 sm:p-6">
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">
                 Cheka Pro · coming soon
               </p>

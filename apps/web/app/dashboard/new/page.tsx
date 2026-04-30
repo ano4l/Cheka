@@ -22,14 +22,14 @@ export default async function NewReviewPage() {
         title="Start a new contract review"
       />
 
-      <div className="flex-1 px-6 py-6">
-        <div className="grid gap-5 xl:grid-cols-[1fr_280px]">
+      <div className="flex-1 px-4 py-5 sm:px-6 sm:py-6">
+        <div className="grid gap-4 xl:grid-cols-[1fr_300px] xl:gap-5">
           <div className="min-w-0">
             <PreviewStudio />
           </div>
 
           <aside className="space-y-4">
-            <div className="surface p-4">
+            <div className="glass p-4 sm:p-5">
               <h2 className="text-sm font-semibold text-ink">What happens next</h2>
               <ol className="mt-3 space-y-3 text-xs text-muted">
                 {[
@@ -39,7 +39,7 @@ export default async function NewReviewPage() {
                   ["4", "Ask", "Three free follow-up questions per review, contract-aware."],
                 ].map(([num, title, body]) => (
                   <li className="flex items-start gap-3" key={num}>
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-line bg-canvas text-[10px] font-semibold text-muted">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/70 bg-white/65 text-[10px] font-semibold text-ink backdrop-blur">
                       {num}
                     </span>
                     <div>
@@ -51,7 +51,7 @@ export default async function NewReviewPage() {
               </ol>
             </div>
 
-            <div className="surface p-4">
+            <div className="glass p-4 sm:p-5">
               <h2 className="text-sm font-semibold text-ink">Demo limits</h2>
               <ul className="mt-2.5 space-y-1.5 text-xs text-muted">
                 <li className="flex items-start gap-2">
@@ -75,7 +75,7 @@ export default async function NewReviewPage() {
               </ul>
             </div>
 
-            <div className="surface p-4">
+            <div className="glass p-4 sm:p-5">
               <h2 className="text-sm font-semibold text-ink">Need a hand?</h2>
               <p className="mt-1.5 text-xs leading-5 text-muted">
                 Cheka provides guidance, not legal representation. For high-risk contracts, escalate to a lawyer

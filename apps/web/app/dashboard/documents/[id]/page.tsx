@@ -56,12 +56,12 @@ export default async function DocumentDetailPage({ params }: { params: Promise<{
         title={doc.name}
       />
 
-      <div className="flex-1 px-6 py-6">
-        <div className="grid gap-5 xl:grid-cols-[1fr_320px]">
-          <div className="space-y-5">
-            <div className="surface p-5">
-              <div className="flex items-start gap-5">
-                <div className={`flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-4 ${riskColor.border} ${riskColor.bg}`}>
+      <div className="flex-1 px-4 py-5 sm:px-6 sm:py-6">
+        <div className="grid gap-4 xl:grid-cols-[1fr_320px] xl:gap-5">
+          <div className="space-y-4 lg:space-y-5">
+            <div className="glass-strong p-5 sm:p-6">
+              <div className="flex flex-col items-start gap-5 sm:flex-row">
+                <div className={`flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-4 ${riskColor.border} ${riskColor.bg} shadow-soft`}>
                   <span className={`text-2xl font-bold tabular-nums ${riskColor.text}`}>{doc.riskScore}</span>
                 </div>
                 <div className="min-w-0 flex-1">
@@ -80,23 +80,23 @@ export default async function DocumentDetailPage({ params }: { params: Promise<{
               </div>
             </div>
 
-            <div className="surface overflow-hidden">
-              <div className="border-b border-line px-4 py-3">
+            <div className="glass overflow-hidden">
+              <div className="border-b border-white/40 px-4 py-3 sm:px-5">
                 <h2 className="text-sm font-semibold text-ink">Red flags · {evidence.length}</h2>
                 <p className="text-xs text-muted">Clauses with verbatim evidence and weighted risk scoring</p>
               </div>
-              <ul className="divide-y divide-line">
+              <ul className="divide-y divide-white/40">
                 {evidence.map((item) => (
-                  <li className="px-4 py-4" key={item.heading}>
+                  <li className="px-4 py-4 sm:px-5" key={item.heading}>
                     <div className="flex items-start gap-3">
-                      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-rose-200 bg-rose-50 text-rose-700">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-rose-200/70 bg-rose-50/80 text-rose-700">
                         <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.4">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4m0 4h.01M5 19h14a2 2 0 001.7-3L13.7 4a2 2 0 00-3.4 0L3.3 16A2 2 0 005 19z" />
                         </svg>
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-semibold text-ink">{item.heading}</p>
-                        <blockquote className="mt-1.5 rounded-md border-l-2 border-rose-300 bg-rose-50/50 px-3 py-2 text-xs italic leading-5 text-ink">
+                        <blockquote className="mt-1.5 rounded-xl border-l-2 border-rose-300 bg-rose-50/50 px-3 py-2 text-xs italic leading-5 text-ink">
                           “{item.quote}”
                         </blockquote>
                         <p className="mt-1.5 text-xs font-medium text-rose-700">{item.impact}</p>
@@ -107,7 +107,7 @@ export default async function DocumentDetailPage({ params }: { params: Promise<{
               </ul>
             </div>
 
-            <div className="surface p-4">
+            <div className="glass p-4 sm:p-5">
               <h2 className="text-sm font-semibold text-ink">Recommended actions</h2>
               <ul className="mt-2.5 space-y-2 text-sm text-muted">
                 <li className="flex gap-2">
@@ -133,8 +133,8 @@ export default async function DocumentDetailPage({ params }: { params: Promise<{
           </div>
 
           <aside className="space-y-4">
-            <div className="surface p-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">Details</h3>
+            <div className="glass p-4 sm:p-5">
+              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-muted">Details</h3>
               <dl className="mt-3 space-y-2 text-sm">
                 <div className="flex justify-between gap-3">
                   <dt className="text-muted">Document</dt>
@@ -163,8 +163,8 @@ export default async function DocumentDetailPage({ params }: { params: Promise<{
               </dl>
             </div>
 
-            <div className="surface p-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">Follow-ups remaining</h3>
+            <div className="glass p-4 sm:p-5">
+              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-muted">Follow-ups remaining</h3>
               <p className="mt-2 text-xl font-semibold text-ink">2 of 3</p>
               <p className="mt-1 text-xs text-muted">Ask anything about cancellation, fees, or whether the contract is safe to sign.</p>
               <Link className="btn-accent mt-3 w-full px-3 py-2 text-xs" href="/dashboard/new">

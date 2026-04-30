@@ -7,9 +7,9 @@ interface KpiCardProps {
 }
 
 const trendColor: Record<"up" | "down" | "flat", string> = {
-  up: "text-emerald-700 bg-emerald-50 border-emerald-200",
-  down: "text-rose-700 bg-rose-50 border-rose-200",
-  flat: "text-muted bg-canvas border-line",
+  up: "text-emerald-700 bg-emerald-50/80 border-emerald-200/80",
+  down: "text-rose-700 bg-rose-50/80 border-rose-200/80",
+  flat: "text-muted bg-white/70 border-white/80",
 };
 
 const trendArrow: Record<"up" | "down" | "flat", string> = {
@@ -20,20 +20,20 @@ const trendArrow: Record<"up" | "down" | "flat", string> = {
 
 export function KpiCard({ label, value, delta, hint, icon }: KpiCardProps) {
   return (
-    <div className="surface p-4">
+    <div className="glass p-4 sm:p-5">
       <div className="flex items-start justify-between gap-2">
-        <p className="text-[11px] font-medium uppercase tracking-wider text-muted">{label}</p>
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-muted">{label}</p>
         {icon ? (
-          <span className="flex h-7 w-7 items-center justify-center rounded-md border border-line bg-canvas text-muted">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/70 bg-white/70 text-muted backdrop-blur">
             {icon}
           </span>
         ) : null}
       </div>
-      <p className="mt-2 text-2xl font-bold text-ink tabular-nums">{value}</p>
-      <div className="mt-2 flex items-center gap-2">
+      <p className="mt-3 text-2xl font-bold text-ink tabular-nums sm:text-3xl">{value}</p>
+      <div className="mt-2.5 flex flex-wrap items-center gap-2">
         {delta ? (
           <span
-            className={`inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[11px] font-medium ${trendColor[delta.trend]}`}
+            className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold ${trendColor[delta.trend]}`}
           >
             <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2.4">
               <path strokeLinecap="round" strokeLinejoin="round" d={trendArrow[delta.trend]} />

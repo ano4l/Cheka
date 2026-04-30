@@ -37,12 +37,12 @@ export function DropZone({ onFile, selectedFile, onClear, accept = acceptDefault
     <div className="space-y-1.5">
       <p className="label">Document</p>
       <label
-        className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-4 py-6 text-center transition ${
+        className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed px-4 py-7 text-center backdrop-blur transition no-tap-highlight sm:py-9 ${
           isDragging
-            ? "border-accent bg-accent/5"
+            ? "border-accent bg-accent/10"
             : selectedFile
-              ? "border-emerald-300 bg-emerald-50/40"
-              : "border-line bg-canvas hover:border-slate-300 hover:bg-white"
+              ? "border-emerald-300/80 bg-emerald-50/55"
+              : "border-white/80 bg-white/45 hover:border-ink/30 hover:bg-white/65"
         } ${disabled ? "pointer-events-none opacity-60" : ""}`}
         onDragEnter={(event) => {
           event.preventDefault();
@@ -73,7 +73,7 @@ export function DropZone({ onFile, selectedFile, onClear, accept = acceptDefault
 
         {selectedFile ? (
           <>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 12.5l5 5 9-10" />
               </svg>
@@ -109,7 +109,7 @@ export function DropZone({ onFile, selectedFile, onClear, accept = acceptDefault
           </>
         ) : (
           <>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-canvas text-muted transition group-hover:bg-accent/10 group-hover:text-accent">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/65 text-muted backdrop-blur transition group-hover:bg-ink group-hover:text-white">
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
                 <path
                   strokeLinecap="round"
