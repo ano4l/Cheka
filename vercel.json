@@ -2,13 +2,13 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build:web",
   "installCommand": "npm install",
-  "outputDirectory": "apps/web/.next",
+  "outputDirectory": ".next",
   "framework": "nextjs",
   "functions": {
-    "apps/web/app/api/analyze/route.ts": {
+    "app/api/analyze/route.ts": {
       "maxDuration": 60
     },
-    "apps/web/app/api/follow-up/route.ts": {
+    "app/api/follow-up/route.ts": {
       "maxDuration": 30
     }
   }
